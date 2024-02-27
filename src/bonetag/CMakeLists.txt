@@ -25,8 +25,7 @@ target_link_libraries(BoneTagSerialPlugin PUBLIC BoneTagSerial)
 install(FILES etc/BoneTagSerialPlugin.yaml DESTINATION ${MC_PLUGINS_RUNTIME_INSTALL_PREFIX}/etc/)
 
 install(
-  FILES scripts/reset_bonetag_serial
+  PROGRAMS scripts/reset_bonetag_serial
   DESTINATION ${CMAKE_INSTALL_PREFIX}/bin
-  PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE GROUP_READ GROUP_WRITE GROUP_EXECUTE
 )
 
