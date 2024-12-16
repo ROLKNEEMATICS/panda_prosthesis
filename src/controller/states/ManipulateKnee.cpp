@@ -105,7 +105,7 @@ void ResultHandler::write_csv(const std::string & path)
   }
 
   csv << "femur_tangage,femur_roulis,femur_lacet,tibia_tangage,tibia_roulis,tibia_lacet,femur_x,femur_y,femur_z,tibia_"
-         "x,tibia_y,tibia_z,sensor_0,sensor_1,sensor_2,sensor_3,sensor_4,sensor_5,sensor_6,sensor_7,sensor_8,sensor_9"
+         "x,tibia_y,tibia_z,sensor_0,sensor_1,sensor_2"
       << std::endl;
 
   for(const auto & result : results_)
@@ -531,9 +531,9 @@ bool ManipulateKnee::run(mc_control::fsm::Controller & ctl)
     error = sva::transformError(X_axisFrame_actual, X_axis_target);
   };
 
-  handle_motion(ctl.realRobot("panda_femur"), femurError_, *femur_task_, X_0_femurAxis, femurTranslation_,
+  handle_motion(ctl.robot("panda_femur"), femurError_, *femur_task_, X_0_femurAxis, femurTranslation_,
                 femurRotation_, femurTranslationActual_, femurRotationActual_);
-  handle_motion(ctl.realRobot("panda_tibia"), tibiaError_, *tibia_task_, X_0_tibiaAxis, tibiaTranslation_,
+  handle_motion(ctl.robot("panda_tibia"), tibiaError_, *tibia_task_, X_0_tibiaAxis, tibiaTranslation_,
                 tibiaRotation_, tibiaTranslationActual_, tibiaRotationActual_);
 
   ++iter_;

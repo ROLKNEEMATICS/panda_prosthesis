@@ -9,6 +9,6 @@ Franka:
   panda_femur: # Robot on which the femur (positive knee) is attached 
     ip: panda2 # IP of the robot
   panda_tibia: # Robot on which the tibia is attached
-    ip: panda7 
+    ip: panda6
   # Actuated robots that are not controlled via mc_franka
   ignored: [env/door, env/box]

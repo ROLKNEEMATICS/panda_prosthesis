@@ -91,7 +91,9 @@ void BoneTagSerialPlugin::init(mc_control::MCGlobalController & gc, const mc_rtc
                                         });
   gc.controller().datastore().make_call("BoneTagSerialPlugin::Stop", [this]() -> void { running_ = false; });
 
-  gc.controller().gui()->addElement({"BoneTagSerialPlugin"},
+
+
+    gc.controller().gui()->addElement({"BoneTagSerialPlugin"},
                                     mc_rtc::gui::Label("Connected", [this]() { return serial_.connected(); }),
                                     mc_rtc::gui::Button("Connect", [this]() { connect_requested_ = true; }),
                                     mc_rtc::gui::ArrayLabel("Data", {"0", "1", "2", "3"},
@@ -102,7 +104,25 @@ void BoneTagSerialPlugin::init(mc_control::MCGlobalController & gc, const mc_rtc
                                       thread_.join();
                                     }));
 
-  using Color = mc_rtc::gui::Color;
+}
+
+void BoneTagSerialPlugin::reset(mc_control::MCGlobalController & controller) {}
+
+void BoneTagSerialPlugin::before(mc_control::MCGlobalController & gc)
+{
+
+
+  if(hasReceivedData_)
+  {
+    std::lock_guard<std::mutex> lock(dataMutex_);
+    lastData_ = data_;
+    hasReceivedData_ = false;
+    lastDataIsNew_ = true;
+
+    if(!plotDisplayed)
+    {
+      plotDisplayed = true;
+       using Color = mc_rtc::gui::Color;
   using Style = mc_rtc::gui::plot::Style;
   const std::vector<std::pair<Color, Style>> sensorColors = {
       {Color::Red, Style::Solid},     {Color::Blue, Style::Dashed},          {Color::Green, Style::Solid},
@@ -119,25 +139,14 @@ void BoneTagSerialPlugin::init(mc_control::MCGlobalController & gc, const mc_rtc
   gc.controller().gui()->addPlot("BoneTag Measurements", mc_rtc::gui::plot::X("N", [this]() { return t_; }),
                                  make_sensor_plot(0), make_sensor_plot(1), make_sensor_plot(2), make_sensor_plot(3));
   gc.controller().logger().addLogEntry("BoneTag_Sensors", this, [this]() -> std::array<double, 4> {
-    std::array<double, 4> data{0};
+    std::array<double,4> data{0};
     for(int i = 0; i < lastData_.size(); ++i)
     {
       data[i] = lastData_[i];
     }
     return data;
   });
-}
-
-void BoneTagSerialPlugin::reset(mc_control::MCGlobalController & controller) {}
-
-void BoneTagSerialPlugin::before(mc_control::MCGlobalController & gc)
-{
-  if(hasReceivedData_)
-  {
-    std::lock_guard<std::mutex> lock(dataMutex_);
-    lastData_ = data_;
-    hasReceivedData_ = false;
-    lastDataIsNew_ = true;
+    }
   }
 }
 

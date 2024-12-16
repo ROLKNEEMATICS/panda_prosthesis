@@ -39,6 +39,7 @@ protected:
   io::BoneTagSerial::Data data_;
   io::BoneTagSerial::Data lastData_;
   double t_ = 0;
+  bool plotDisplayed = false;
 
   bool hasReceivedData_ = false;
   bool lastDataIsNew_ = false;
