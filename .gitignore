@@ -1,1 +1,4 @@
 build/
+data/results
+.vscode/
+data/trajectories
