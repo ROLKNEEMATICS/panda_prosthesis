@@ -1,5 +1,5 @@
 #!/bin/bash
 
-screen -dm /dev/ttyUSB0 4800
+screen -dm /dev/ttyUSB0 57600
 sleep 3
 screen -X quit

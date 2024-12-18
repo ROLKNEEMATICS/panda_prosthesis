@@ -5,7 +5,7 @@
 namespace io
 {
 #define SYNC_FOUND prev_byte == 'A' && curr_byte == 'T'
-#define NUM_BYTES 8
+#define NUM_BYTES 16
 uint8_t prev_byte = 0;
 uint8_t curr_byte = 0;
 std::array<uint8_t, NUM_BYTES> input_data;
@@ -75,7 +75,7 @@ void BoneTagSerial::print_input_data()
 }
 void BoneTagSerial::get_input_data(bool print_bytes)
 {
-  char rdata[8];
+  char rdata[NUM_BYTES];
   f.read(rdata, NUM_BYTES);
   if(f.fail())
   {
@@ -98,7 +98,9 @@ void BoneTagSerial::parse_data(bool print_raw_data)
   {
     uint16_t currentRawData = input_data[compt] << 8;
     currentRawData += input_data[compt + 1];
-    rawData[i] = currentRawData;
+
+    rawData[i] = std::round(alphaFilter_ * currentRawData + (1 - alphaFilter_) * rawData[i]);
+    
 
     compt += 2;
   }

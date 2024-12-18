@@ -7,8 +7,8 @@ namespace io
 {
 struct BoneTagSerial
 {
-  using Data = std::array<uint16_t, 4>;
-  using RawData = std::array<uint16_t, 4>;
+  using Data = std::array<uint16_t, 8>;
+  using RawData = std::array<uint16_t, 8>;
 
   BoneTagSerial();
   ~BoneTagSerial();
@@ -17,15 +17,17 @@ struct BoneTagSerial
   bool connected() const noexcept;
   const Data & read();
 
-  bool debug_bytes = false;
-  bool debug_raw = false;
-  bool debug_results = false;
+  bool debug_bytes = true;
+  bool debug_raw = true;
+  bool debug_results = true;
 
   inline const std::string & descriptor() const noexcept
   {
     return descriptor_;
   }
 
+  inline double alphaFilter() const noexcept{ return alphaFilter_; }
+  void alphaFilter(double a) { alphaFilter_ = a; }
 protected:
   void sync();
   void get_input_data(bool print_bytes);
@@ -39,6 +41,7 @@ protected:
   std::string descriptor_;
   RawData rawData;
   Data result;
+  double alphaFilter_ = 0.1;
 };
 } // namespace io
 
