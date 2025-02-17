@@ -18,11 +18,11 @@ BoneTagSerialPlugin::~BoneTagSerialPlugin()
 
 void BoneTagSerialPlugin::connect()
 {
-  serial_.close();
+  serial_.close_serial_port();
   try
   {
-    serial_.open(descriptor_);
-    mc_rtc::log::success("[BoneTagSerialPlugin] Communication with device {} opened", descriptor_);
+    serial_.open_serial_port(serial_port_name, serial_port_baud_rate);
+    mc_rtc::log::success("[BoneTagSerialPlugin] Communication with device {} opened", serial_port_name);
   }
   catch(std::runtime_error & e)
   {
@@ -30,6 +30,22 @@ void BoneTagSerialPlugin::connect()
   }
 }
 
+void BoneTagSerialPlugin::connectAndStartReading()
+{
+  connect();
+  try
+  {
+    mc_rtc::log::success("[BoneTagSerialPlugin] Starting serial port reading ...");
+    serial_.read_serial_port();
+    mc_rtc::log::success("[BoneTagSerialPlugin] Serial port reading started !");
+  }
+  catch(std::runtime_error & e)
+  {
+    mc_rtc::log::error("[BoneTagSerialPlugin] Failed to read data");
+    hasReceivedData_ = false;
+  }
+  connect_requested_ = false;
+}
 void BoneTagSerialPlugin::init(mc_control::MCGlobalController & gc, const mc_rtc::Configuration & config)
 {
   data_.fill(0);
@@ -39,46 +55,43 @@ void BoneTagSerialPlugin::init(mc_control::MCGlobalController & gc, const mc_rtc
   double rate = config("rate", DEFAULT_RATE);
   rate_ = (1. / rate) / gc.controller().timeStep;
 
-  descriptor_ = config("descriptor", std::string{"/dev/ttyUSB0"});
-  thread_ = std::thread([this]() {
-    mc_rtc::log::info("[BoneTagSerialPlugin] Starting serial communication thread with {}", descriptor_);
-    connect();
+  serial_port_name = config("serial_port_name", std::string{"/dev/ttyUSB0"});
+  serial_port_baud_rate = config("serial_port_baud_rate", 9600);
 
-    unsigned iter_ = 0;
-    while(running_)
-    {
-      if(iter_ == 0 || iter_ % rate_ == 0)
+  thread_ = std::thread(
+      [this]()
       {
-        if(connect_requested_)
+        mc_rtc::log::info("[BoneTagSerialPlugin] Starting serial communication thread with {}", serial_port_name);
+        connectAndStartReading();
+
+        unsigned iter_ = 0;
+        while(running_)
         {
-          connect();
-          connect_requested_ = false;
+          if(iter_ == 0 || iter_ % rate_ == 0)
+          {
+            if(connect_requested_)
+            {
+              connectAndStartReading();
+            }
+            iter_ = 0;
+          }
+          ++iter_;
         }
-        try
-        {
-          auto data = serial_.read();
-          std::lock_guard<std::mutex> lock(dataMutex_);
-          data_ = data;
-          hasReceivedData_ = true;
-        }
-        catch(std::runtime_error & e)
-        {
-          // mc_rtc::log::error("[BoneTagSerialPlugin] Failed to read data");
-          hasReceivedData_ = false;
-        }
-        iter_ = 0;
-      }
-      ++iter_;
-    }
-    serial_.close();
-  });
+        serial_.close_serial_port();
+      });
 
   gc.controller().datastore().make<bool>("BoneTagSerialPlugin", true);
   gc.controller().datastore().make_call("BoneTagSerialPlugin::Connected", [this]() { return serial_.connected(); });
   gc.controller().datastore().make_call("BoneTagSerialPlugin::GetLastData",
-                                        [this]() -> const io::BoneTagSerial::Data & { return lastData_; });
+                                        [this]() -> const io::BoneTagSerial::Data &
+                                        {
+                                          std::lock_guard<std::mutex> lockDataMutex(dataMutex_);
+                                          return lastData_;
+                                        });
   gc.controller().datastore().make_call("BoneTagSerialPlugin::GetNewData",
-                                        [this]() -> std::optional<io::BoneTagSerial::Data> {
+                                        [this]() -> std::optional<io::BoneTagSerial::Data>
+                                        {
+                                          //std::lock_guard<std::mutex> lockDataMutex(dataMutex_);
                                           if(lastDataIsNew_)
                                           {
                                             lastDataIsNew_ = false;
@@ -90,84 +103,97 @@ void BoneTagSerialPlugin::init(mc_control::MCGlobalController & gc, const mc_rtc
                                           }
                                         });
   gc.controller().datastore().make_call("BoneTagSerialPlugin::Stop", [this]() -> void { running_ = false; });
-
-
-std::vector<std::string> label;
-label.resize(lastData_.size());
- for(int i = 0; i < lastData_.size(); ++i)
+  std::vector<std::string> label;
   {
-    label[i] = std::to_string(i);
+    std::lock_guard<std::mutex> lockDataMutex(dataMutex_);
+
+    label.resize(lastData_.size());
+    for(int i = 0; i < lastData_.size(); ++i)
+    {
+      label[i] = std::to_string(i);
+    }
   }
 
-    gc.controller().gui()->addElement({"BoneTagSerialPlugin"},
-                                    mc_rtc::gui::Label("Connected", [this]() { return serial_.connected(); }),
-                                    mc_rtc::gui::Button("Connect", [this]() { connect_requested_ = true; }),
-                                    mc_rtc::gui::ArrayLabel("Data", label,
-                                                            [this]() { return lastData_; }),
-                                    mc_rtc::gui::NumberInput("Alpha Filter", [this]() { return serial_.alphaFilter(); },
-                                    [this](double a) { serial_.alphaFilter(a); }),
+  gc.controller().gui()->addElement(
+      {"BoneTagSerialPlugin"}, mc_rtc::gui::Label("Connected", [this]() { return serial_.connected(); }),
+      mc_rtc::gui::Button("Connect", [this]() { connect_requested_ = true; }),
+      mc_rtc::gui::ArrayLabel("Data", label,
+                              [this]()
+                              {
+                                std::lock_guard<std::mutex> lockDataMutex(dataMutex_);
+                                return lastData_;
+                              }),
+      mc_rtc::gui::NumberInput(
+          "Alpha Filter", [this]() { return serial_.alphaFilter(); }, [this](double a) { serial_.alphaFilter(a); }),
 
-                                    mc_rtc::gui::Button("Stop", [this]() {
-                                      running_ = false;
-                                      thread_.join();
-                                    }));
-
+      mc_rtc::gui::Button("Stop",
+                          [this]()
+                          {
+                            running_ = false;
+                            thread_.join();
+                          }));
 }
 
 void BoneTagSerialPlugin::reset(mc_control::MCGlobalController & controller) {}
 
 void BoneTagSerialPlugin::before(mc_control::MCGlobalController & gc)
 {
+  std::lock_guard<std::mutex> lockReceivedDataMutex(serial_.received_data_mutex);
 
+  // all_data.insert(all_data.end(),serial_.received_data.begin(),serial_.received_data.end());
+  hasReceivedData_ = !serial_.received_data.empty();
 
   if(hasReceivedData_)
   {
-    std::lock_guard<std::mutex> lock(dataMutex_);
-    lastData_ = data_;
+    //mc_rtc::log::info("[BoneTagSerialPlugin] Received data {}", serial_.received_data.back()[0]);
+    //data_ = serial_.received_data.back();
+    for(auto data_el : serial_.received_data)
+    {
+      {
+      std::lock_guard<std::mutex> lockDataMutex(dataMutex_);
+        lastData_ = data_el;
+        lastDataIsNew_ = true;
+      }
+
+      serial_.received_data.clear();
+
+      if(!plotDisplayed)
+      {
+        plotDisplayed = true;
+        using Color = mc_rtc::gui::Color;
+        using Style = mc_rtc::gui::plot::Style;
+        const std::vector<std::pair<Color, Style>> sensorColors = {
+            {Color::Red, Style::Solid},     {Color::Blue, Style::Dashed},          {Color::Green, Style::Solid},
+            {Color::Black, Style::Dashed},  {Color::Gray, Style::Solid},           {Color::Cyan, Style::Dashed},
+            {Color::Magenta, Style::Solid}, {Color(0.96, 0.74, 0), Style::Dashed}, {Color::Blue, Style::Solid},
+            {Color::Green, Style::Dashed}};
+
+        auto make_sensor_plot = [this, sensorColors](unsigned index)
+        {
+          return mc_rtc::gui::plot::Y(
+              fmt::format("Sensor {}", index + 1), [this, index]() { return lastData_[index]; },
+              sensorColors[index].first, sensorColors[index].second);
+        };
+
+        gc.controller().gui()->addPlot("BoneTag Measurements", mc_rtc::gui::plot::X("N", [this]() { return t_; }),
+                                       make_sensor_plot(0), make_sensor_plot(1), make_sensor_plot(2),
+                                       make_sensor_plot(3), make_sensor_plot(4), make_sensor_plot(5),
+                                       make_sensor_plot(6), make_sensor_plot(7));
+
+        std::vector<double> data;
+        data.resize(lastData_.size());
+        gc.controller().logger().addLogEntry("BoneTag_Sensors", this,
+                                             [this, data]() mutable -> std::vector<double>
+                                             {
+                                               for(int i = 0; i < lastData_.size(); ++i)
+                                               {
+                                                 data[i] = lastData_[i];
+                                               }
+                                               return data;
+                                             });
+      }
+    }
     hasReceivedData_ = false;
-    lastDataIsNew_ = true;
-
-    if(!plotDisplayed)
-    {
-      plotDisplayed = true;
-       using Color = mc_rtc::gui::Color;
-  using Style = mc_rtc::gui::plot::Style;
-  const std::vector<std::pair<Color, Style>> sensorColors = {
-      {Color::Red, Style::Solid},     {Color::Blue, Style::Dashed},          {Color::Green, Style::Solid},
-      {Color::Black, Style::Dashed},  {Color::Gray, Style::Solid},           {Color::Cyan, Style::Dashed},
-      {Color::Magenta, Style::Solid}, {Color(0.96, 0.74, 0), Style::Dashed}, {Color::Blue, Style::Solid},
-      {Color::Green, Style::Dashed}};
-
-  auto make_sensor_plot = [this, sensorColors](unsigned index) {
-    return mc_rtc::gui::plot::Y(
-        fmt::format("Sensor {}", index), [this, index]() { return lastData_[index]; }, sensorColors[index].first,
-        sensorColors[index].second);
-  };
-
-  //for(int i = 0; i < lastData_.size(); ++i)
-  //{
-    gc.controller().gui()->addPlot("BoneTag Measurements", 
-      mc_rtc::gui::plot::X("N", [this]() { return t_; }),
-                                 make_sensor_plot(0),
-                                 make_sensor_plot(1),
-                                 make_sensor_plot(2),
-                                 make_sensor_plot(3),
-                                 make_sensor_plot(4),
-                                 make_sensor_plot(5),
-                                 make_sensor_plot(6),
-                                 make_sensor_plot(7));
-  //}
-  
-  std::vector<double> data;
-  data.resize(lastData_.size());
-  gc.controller().logger().addLogEntry("BoneTag_Sensors", this, [this, data]() mutable -> std::vector<double> {
-    for(int i = 0; i < lastData_.size(); ++i)
-    {
-      data[i] = lastData_[i];
-    }
-    return data;
-  });
-    }
   }
 }
 

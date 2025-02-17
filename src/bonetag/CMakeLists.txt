@@ -1,4 +1,5 @@
-add_library(BoneTagSerial SHARED BoneTagSerial.cpp)
+#add_library(BoneTagSerial SHARED BoneTagSerial.cpp)
+add_library(BoneTagSerial SHARED BoneTagSerial.cpp Packet.cpp)
 target_link_libraries(BoneTagSerial PUBLIC mc_rtc::mc_rtc_utils)
 
 install(TARGETS BoneTagSerial
@@ -6,8 +7,8 @@ install(TARGETS BoneTagSerial
   LIBRARY DESTINATION "${MC_RTC_LIBDIR}"
   RUNTIME DESTINATION bin)
 
-add_executable(TestBoneTagUSB test_bonetag_usb.cpp)
-target_link_libraries(TestBoneTagUSB PUBLIC BoneTagSerial)
+# add_executable(TestBoneTagUSB test_bonetag_usb.cpp)
+# target_link_libraries(TestBoneTagUSB PUBLIC BoneTagSerial)
 
 
 
