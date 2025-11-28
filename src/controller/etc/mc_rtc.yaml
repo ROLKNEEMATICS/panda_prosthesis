@@ -1,14 +1,19 @@
-MainRobot: PandaProsthesis::Femur
-Enabled: PandaProsthesis
-Timestep: 0.001 
+# MainRobot: PandaProsthesis::Femur
+# Enabled: PandaProsthesis
+# Timestep: 0.001 
 
-# Franka specific configuration
-Franka:
-  ControlMode: Velocity # Can be: Position/Velocity/Torque
-  ShowNetworkWarnings: false
-  panda_femur: # Robot on which the femur (positive knee) is attached 
-    ip: panda2 # IP of the robot
-  panda_tibia: # Robot on which the tibia is attached
-    ip: panda7
-  # Actuated robots that are not controlled via mc_franka
-  ignored: [env/door, env/box]
+# # Franka specific configuration
+# Franka:
+#   ControlMode: Velocity # Can be: Position/Velocity/Torque
+#   ShowNetworkWarnings: false
+#   panda_femur: # Robot on which the femur (positive knee) is attached 
+#     ip: panda2 # IP of the robot
+#   panda_tibia: # Robot on which the tibia is attached
+#     ip: panda7
+#   # Actuated robots that are not controlled via mc_franka
+#   ignored: [env/door, env/box]
+
+{
+  "MainRobot":  "JVRC1",
+  "Enabled"  : ["MyFirstController"]
+}
