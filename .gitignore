@@ -7,3 +7,4 @@ data/results
 .vscode/
 data/trajectories
 imgui.ini
+.direnv/

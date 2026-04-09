@@ -2,7 +2,8 @@
 #   module: Panda2LIRMMDefault::BoneTag::Femur
 #   name: panda_femur
 MainRobot:
-  module: Panda2LIRMM_2::Default::BoneTag::Femur
+  #module: Panda2LIRMM_2::Default::BoneTag::Femur
+  module: Panda2LIRMM_FR1_Default_Table2_Calibrated::BoneTag::Femur
   name: panda_femur
 
 # MainRobot:
@@ -20,7 +21,7 @@ MainRobot:
 # MainRobot: UR10::BoneTag::Femur
 Enabled: PandaProsthesis
 Timestep: 0.001
-VerboseLoader: true
+VerboseLoader: 
 Log: true
 
 # Franka specific configuration

@@ -52,7 +52,7 @@ robots:
       lower_force_thresholds: [-100, -100, -100, -100, -100, -100]
       upper_force_thresholds: [100, 100, 100, 100, 100, 100]
   panda_tibia:
-    module: Panda7LIRMM_2::Default::BoneTag::Tibia
+    module: Panda7LIRMM_FR1_Default_Table2_Calibrated::BoneTag::Tibia
     # module: Panda7LIRMMDefault::BoneTag::Tibia
     # module: Panda7LIRMMDefault::TAA::Talar
     # module: Panda7LIRMMDefault::TSA::Glenoid
@@ -100,17 +100,67 @@ constraints:
   velocityPercent: 0.2
 # Collision constraint
 collisions:
-# #1) AutoCollision Constraints (
-# PS. commented out to avoid duplications later + kinematics const should be enough
-# - type: collision
-#   r1: panda_tibia
-#   r2: panda_tibia
-#   useMinimal: true
-# - type: collision
-#   r1: panda_femur
-#   r2: panda_femur
-#   useMinimal: true
-#2) Femur-Tibia Collision Constraints
+# 1) panda_femur auto-collisions & Femur-Table Collision Constraints
+- type: collision
+  r1: panda_femur
+  r2: panda_femur
+  useMinimal: true
+  collisions:
+    - body1: femur
+      body2: robot_support
+      iDist: 0.01
+      sDist: 0.002
+    - body1: support_femur
+      body2: robot_support
+      iDist: 0.01
+      sDist: 0.002
+    - body1: convex_panda_link4
+      body2: robot_support
+      iDist: 0.01
+      sDist: 0.002
+    - body1: convex_panda_link5
+      body2: robot_support
+      iDist: 0.01
+      sDist: 0.002
+    - body1: convex_panda_link6
+      body2: robot_support
+      iDist: 0.01
+      sDist: 0.002
+    - body1: convex_panda_link7
+      body2: robot_support
+      iDist: 0.01
+      sDist: 0.002
+# 2) panda_tibia auto-collisions & Tibia-Table
+- type: collision
+  r1: panda_tibia
+  r2: panda_tibia
+  useMinimal: true
+  collisions:
+    - body1: tibia
+      body2: robot_support
+      iDist: 0.01
+      sDist: 0.002
+    - body1: support_tibia
+      body2: robot_support
+      iDist: 0.01
+      sDist: 0.002
+    - body1: convex_panda_link4
+      body2: robot_support
+      iDist: 0.01
+      sDist: 0.002
+    - body1: convex_panda_link5
+      body2: robot_support
+      iDist: 0.01
+      sDist: 0.002
+    - body1: convex_panda_link6
+      body2: robot_support
+      iDist: 0.01
+      sDist: 0.002
+    - body1: convex_panda_link7
+      body2: robot_support
+      iDist: 0.01
+      sDist: 0.002
+#1) Femur-Tibia Collision Constraints
 - type: collision
   r1: panda_femur
   r2: panda_tibia
@@ -267,158 +317,6 @@ collisions:
       sDist: 0.002
       iDist: 0.01
       sDist: 0.002
-  useMinimal: true
-#3) Femur-Table & Tibia-Table Collision Constraints
-- type: collision
-  r1: panda_femur
-  r2: panda_femur
-  collisions:
-    - body1: femur
-      body2: robot_support
-      iDist: 0.01
-      sDist: 0.002
-    - body1: support_femur
-      body2: robot_support
-      iDist: 0.01
-      sDist: 0.002
-    - body1: convex_panda_link4
-      body2: robot_support
-      iDist: 0.01
-      sDist: 0.002
-    - body1: convex_panda_link5
-      body2: robot_support
-      iDist: 0.01
-      sDist: 0.002
-    - body1: convex_panda_link6
-      body2: robot_support
-      iDist: 0.01
-      sDist: 0.002
-    - body1: convex_panda_link7
-      body2: robot_support
-      iDist: 0.01
-      sDist: 0.002
-  useMinimal: true
-- type: collision
-  r1: panda_tibia
-  r2: panda_tibia
-  collisions:
-    - body1: tibia
-      body2: robot_support
-      iDist: 0.01
-      sDist: 0.002
-    - body1: support_tibia
-      body2: robot_support
-      iDist: 0.01
-      sDist: 0.002
-    - body1: convex_panda_link4
-      body2: robot_support
-      iDist: 0.01
-      sDist: 0.002
-    - body1: convex_panda_link5
-      body2: robot_support
-      iDist: 0.01
-      sDist: 0.002
-    - body1: convex_panda_link6
-      body2: robot_support
-      iDist: 0.01
-      sDist: 0.002
-    - body1: convex_panda_link7
-      body2: robot_support
-      iDist: 0.01
-      sDist: 0.002
-  useMinimal: true
-#4) Femur-KneeBrace & Tibia-KneeBrace Collision Constraints
-# PS. no need to add convex_panda_link4 here
-# - type: collision
-#   r1: panda_femur
-#   r2: bonetag_knee_brace
-#   collisions:
-#     - body1: femur
-#       body2: bonetag_knee_brace_left
-#       iDist: 0.01
-#       sDist: 0.001
-#     - body1: support_femur
-#       body2: bonetag_knee_brace_left
-#       iDist: 0.01
-#       sDist: 0.001
-#     - body1: convex_panda_link5
-#       body2: bonetag_knee_brace_left
-#       iDist: 0.01
-#       sDist: 0.001
-#     - body1: convex_panda_link6
-#       body2: bonetag_knee_brace_left
-#       iDist: 0.01
-#       sDist: 0.001
-#     - body1: convex_panda_link7
-#       body2: bonetag_knee_brace_left
-#       iDist: 0.01
-#       sDist: 0.001
-#     - body1: femur
-#       body2: bonetag_knee_brace_right
-#       iDist: 0.01
-#       sDist: 0.001
-#     - body1: support_femur
-#       body2: bonetag_knee_brace_right
-#       iDist: 0.01
-#       sDist: 0.001
-#     - body1: convex_panda_link5
-#       body2: bonetag_knee_brace_right
-#       iDist: 0.01
-#       sDist: 0.001
-#     - body1: convex_panda_link6
-#       body2: bonetag_knee_brace_right
-#       iDist: 0.01
-#       sDist: 0.001
-#     - body1: convex_panda_link7
-#       body2: bonetag_knee_brace_right
-#       iDist: 0.01
-#       sDist: 0.001
-#   useMinimal: true
-# - type: collision
-#   r1: panda_tibia
-#   r2: bonetag_knee_brace
-#   collisions:
-#     - body1: tibia
-#       body2: bonetag_knee_brace_left
-#       iDist: 0.01
-#       sDist: 0.001
-#     - body1: support_tibia
-#       body2: bonetag_knee_brace_left
-#       iDist: 0.01
-#       sDist: 0.001
-#     - body1: convex_panda_link5
-#       body2: bonetag_knee_brace_left
-#       iDist: 0.01
-#       sDist: 0.001
-#     - body1: convex_panda_link6
-#       body2: bonetag_knee_brace_left
-#       iDist: 0.01
-#       sDist: 0.001
-#     - body1: convex_panda_link7
-#       body2: bonetag_knee_brace_left
-#       iDist: 0.01
-#       sDist: 0.001
-#     - body1: tibia
-#       body2: bonetag_knee_brace_right
-#       iDist: 0.01
-#       sDist: 0.001
-#     - body1: support_tibia
-#       body2: bonetag_knee_brace_right
-#       iDist: 0.01
-#       sDist: 0.001
-#     - body1: convex_panda_link5
-#       body2: bonetag_knee_brace_right
-#       iDist: 0.01
-#       sDist: 0.001
-#     - body1: convex_panda_link6
-#       body2: bonetag_knee_brace_right
-#       iDist: 0.01
-#       sDist: 0.001
-#     - body1: convex_panda_link7
-#       body2: bonetag_knee_brace_right
-#       iDist: 0.01
-#       sDist: 0.001
-#   useMinimal: true
 
 ObserverPipelines:
   - name: PandaFemur

@@ -19,7 +19,8 @@ void AttachKnee::start(mc_control::fsm::Controller & ctl)
   }
   for(const auto & col : config_("collisions"))
   {
-    ctl.addCollisions(col("r1"), col("r2"), col("collisions"), true);
+    // ctl.addCollisions(col("r1"), col("r2"), col("collisions"), true);
+    ctl.addCollisions(col("r1"), col("r2"), col("collisions"));
   }
 }
 
