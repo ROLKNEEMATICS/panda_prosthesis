@@ -8,6 +8,7 @@
 #include <mc_trajectory/LinearInterpolation.h>
 #include <boost/filesystem.hpp>
 #include <3rd-party/csv.h>
+#include <iomanip>
 #include <utils.h>
 
 namespace fs = boost::filesystem;

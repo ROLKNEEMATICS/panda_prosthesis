@@ -21,7 +21,6 @@ MainRobot:
 # MainRobot: UR10::BoneTag::Femur
 Enabled: PandaProsthesis
 Timestep: 0.001
-VerboseLoader: 
 Log: true
 
 # Franka specific configuration

@@ -8,3 +8,4 @@ data/results
 data/trajectories
 imgui.ini
 .direnv/
+result

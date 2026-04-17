@@ -16,6 +16,22 @@
         "type": "github"
       }
     },
+    "flake-compat_2": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1767039857,
+        "narHash": "sha256-vNpUSpF5Nuw8xvDLj2KCwwksIbjua2LZCqhV1LNRDns=",
+        "owner": "edolstra",
+        "repo": "flake-compat",
+        "rev": "5edf11c44bc78a0d334f6334cdaf7d60d732daab",
+        "type": "github"
+      },
+      "original": {
+        "owner": "edolstra",
+        "repo": "flake-compat",
+        "type": "github"
+      }
+    },
     "flake-parts": {
       "inputs": {
         "nixpkgs-lib": "nixpkgs-lib"
@@ -37,6 +53,7 @@
     "flake-parts_2": {
       "inputs": {
         "nixpkgs-lib": [
+          "mc-panda",
           "mc-rtc-nix",
           "gepetto",
           "system-manager",
@@ -76,9 +93,87 @@
         "type": "github"
       }
     },
+    "flake-parts_4": {
+      "inputs": {
+        "nixpkgs-lib": "nixpkgs-lib_3"
+      },
+      "locked": {
+        "lastModified": 1775087534,
+        "narHash": "sha256-91qqW8lhL7TLwgQWijoGBbiD4t7/q75KTi8NxjVmSmA=",
+        "owner": "hercules-ci",
+        "repo": "flake-parts",
+        "rev": "3107b77cd68437b9a76194f0f7f9c55f2329ca5b",
+        "type": "github"
+      },
+      "original": {
+        "owner": "hercules-ci",
+        "repo": "flake-parts",
+        "type": "github"
+      }
+    },
+    "flake-parts_5": {
+      "inputs": {
+        "nixpkgs-lib": [
+          "mc-rtc-nix",
+          "gepetto",
+          "system-manager",
+          "userborn",
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1768135262,
+        "narHash": "sha256-PVvu7OqHBGWN16zSi6tEmPwwHQ4rLPU9Plvs8/1TUBY=",
+        "owner": "hercules-ci",
+        "repo": "flake-parts",
+        "rev": "80daad04eddbbf5a4d883996a73f3f542fa437ac",
+        "type": "github"
+      },
+      "original": {
+        "owner": "hercules-ci",
+        "repo": "flake-parts",
+        "type": "github"
+      }
+    },
+    "flake-parts_6": {
+      "inputs": {
+        "nixpkgs-lib": "nixpkgs-lib_4"
+      },
+      "locked": {
+        "lastModified": 1775087534,
+        "narHash": "sha256-91qqW8lhL7TLwgQWijoGBbiD4t7/q75KTi8NxjVmSmA=",
+        "owner": "hercules-ci",
+        "repo": "flake-parts",
+        "rev": "3107b77cd68437b9a76194f0f7f9c55f2329ca5b",
+        "type": "github"
+      },
+      "original": {
+        "owner": "hercules-ci",
+        "repo": "flake-parts",
+        "type": "github"
+      }
+    },
     "flake-utils": {
       "inputs": {
         "systems": "systems"
+      },
+      "locked": {
+        "lastModified": 1731533236,
+        "narHash": "sha256-l0KFg5HjrsfsO/JpG+r7fRrqm12kzFHyUHqHCVpMMbI=",
+        "owner": "numtide",
+        "repo": "flake-utils",
+        "rev": "11707dc2f618dd54ca8739b309ec4fc024de578b",
+        "type": "github"
+      },
+      "original": {
+        "owner": "numtide",
+        "repo": "flake-utils",
+        "type": "github"
+      }
+    },
+    "flake-utils_2": {
+      "inputs": {
+        "systems": "systems_3"
       },
       "locked": {
         "lastModified": 1731533236,
@@ -99,6 +194,7 @@
         "flake-parts": "flake-parts",
         "nix-ros-overlay": "nix-ros-overlay",
         "nixpkgs": [
+          "mc-panda",
           "mc-rtc-nix",
           "gepetto",
           "gazebros2nix",
@@ -107,6 +203,7 @@
           "nixpkgs"
         ],
         "systems": [
+          "mc-panda",
           "mc-rtc-nix",
           "gepetto",
           "gazebros2nix",
@@ -131,9 +228,47 @@
         "type": "github"
       }
     },
+    "flakoboros_2": {
+      "inputs": {
+        "flake-parts": "flake-parts_4",
+        "nix-ros-overlay": "nix-ros-overlay_2",
+        "nixpkgs": [
+          "mc-rtc-nix",
+          "gepetto",
+          "gazebros2nix",
+          "flakoboros",
+          "nix-ros-overlay",
+          "nixpkgs"
+        ],
+        "systems": [
+          "mc-rtc-nix",
+          "gepetto",
+          "gazebros2nix",
+          "flakoboros",
+          "nix-ros-overlay",
+          "flake-utils",
+          "systems"
+        ],
+        "treefmt-nix": "treefmt-nix_2"
+      },
+      "locked": {
+        "lastModified": 1776113076,
+        "narHash": "sha256-rQp/6mgQc4szevay50RbGXOXwL3xC7oHktywFPrmbAM=",
+        "owner": "gepetto",
+        "repo": "flakoboros",
+        "rev": "07a89fe2a47f2f0364e795cf3e69c045de14a3b2",
+        "type": "github"
+      },
+      "original": {
+        "owner": "gepetto",
+        "repo": "flakoboros",
+        "type": "github"
+      }
+    },
     "gazebros2nix": {
       "inputs": {
         "flake-parts": [
+          "mc-panda",
           "mc-rtc-nix",
           "gepetto",
           "gazebros2nix",
@@ -142,6 +277,7 @@
         ],
         "flakoboros": "flakoboros",
         "nix-ros-overlay": [
+          "mc-panda",
           "mc-rtc-nix",
           "gepetto",
           "gazebros2nix",
@@ -149,6 +285,7 @@
           "nix-ros-overlay"
         ],
         "nixpkgs": [
+          "mc-panda",
           "mc-rtc-nix",
           "gepetto",
           "gazebros2nix",
@@ -158,6 +295,7 @@
         "pyproject-build-systems": "pyproject-build-systems",
         "pyproject-nix": "pyproject-nix",
         "systems": [
+          "mc-panda",
           "mc-rtc-nix",
           "gepetto",
           "gazebros2nix",
@@ -165,6 +303,7 @@
           "systems"
         ],
         "treefmt-nix": [
+          "mc-panda",
           "mc-rtc-nix",
           "gepetto",
           "gazebros2nix",
@@ -187,15 +326,73 @@
         "type": "github"
       }
     },
+    "gazebros2nix_2": {
+      "inputs": {
+        "flake-parts": [
+          "mc-rtc-nix",
+          "gepetto",
+          "gazebros2nix",
+          "flakoboros",
+          "flake-parts"
+        ],
+        "flakoboros": "flakoboros_2",
+        "nix-ros-overlay": [
+          "mc-rtc-nix",
+          "gepetto",
+          "gazebros2nix",
+          "flakoboros",
+          "nix-ros-overlay"
+        ],
+        "nixpkgs": [
+          "mc-rtc-nix",
+          "gepetto",
+          "gazebros2nix",
+          "flakoboros",
+          "nixpkgs"
+        ],
+        "pyproject-build-systems": "pyproject-build-systems_2",
+        "pyproject-nix": "pyproject-nix_2",
+        "systems": [
+          "mc-rtc-nix",
+          "gepetto",
+          "gazebros2nix",
+          "flakoboros",
+          "systems"
+        ],
+        "treefmt-nix": [
+          "mc-rtc-nix",
+          "gepetto",
+          "gazebros2nix",
+          "flakoboros",
+          "treefmt-nix"
+        ],
+        "uv2nix": "uv2nix_2"
+      },
+      "locked": {
+        "lastModified": 1776113232,
+        "narHash": "sha256-VtzAiez4xLmUY/TrQ31ECKjnOFDrnorQcu6WfsAF2nk=",
+        "owner": "gepetto",
+        "repo": "gazebros2nix",
+        "rev": "43783392a112e894b857bdb56ede7044437069f4",
+        "type": "github"
+      },
+      "original": {
+        "owner": "gepetto",
+        "repo": "gazebros2nix",
+        "type": "github"
+      }
+    },
     "gepetto": {
       "inputs": {
         "flake-parts": [
+          "mc-panda",
           "mc-rtc-nix",
           "gepetto",
           "gazebros2nix",
           "flake-parts"
         ],
         "flakoboros": [
+          "mc-panda",
           "mc-rtc-nix",
           "gepetto",
           "gazebros2nix",
@@ -204,6 +401,7 @@
         "gazebros2nix": "gazebros2nix",
         "home-manager": "home-manager",
         "nix-ros-overlay": [
+          "mc-panda",
           "mc-rtc-nix",
           "gepetto",
           "gazebros2nix",
@@ -211,6 +409,7 @@
         ],
         "nix-system-graphics": "nix-system-graphics",
         "nixpkgs": [
+          "mc-panda",
           "mc-rtc-nix",
           "gepetto",
           "gazebros2nix",
@@ -218,12 +417,14 @@
         ],
         "system-manager": "system-manager",
         "systems": [
+          "mc-panda",
           "mc-rtc-nix",
           "gepetto",
           "gazebros2nix",
           "systems"
         ],
         "treefmt-nix": [
+          "mc-panda",
           "mc-rtc-nix",
           "gepetto",
           "gazebros2nix",
@@ -244,7 +445,90 @@
         "type": "github"
       }
     },
+    "gepetto_2": {
+      "inputs": {
+        "flake-parts": [
+          "mc-rtc-nix",
+          "gepetto",
+          "gazebros2nix",
+          "flake-parts"
+        ],
+        "flakoboros": [
+          "mc-rtc-nix",
+          "gepetto",
+          "gazebros2nix",
+          "flakoboros"
+        ],
+        "gazebros2nix": "gazebros2nix_2",
+        "home-manager": "home-manager_2",
+        "nix-ros-overlay": [
+          "mc-rtc-nix",
+          "gepetto",
+          "gazebros2nix",
+          "nix-ros-overlay"
+        ],
+        "nix-system-graphics": "nix-system-graphics_2",
+        "nixpkgs": [
+          "mc-rtc-nix",
+          "gepetto",
+          "gazebros2nix",
+          "nixpkgs"
+        ],
+        "system-manager": "system-manager_2",
+        "systems": [
+          "mc-rtc-nix",
+          "gepetto",
+          "gazebros2nix",
+          "systems"
+        ],
+        "treefmt-nix": [
+          "mc-rtc-nix",
+          "gepetto",
+          "gazebros2nix",
+          "treefmt-nix"
+        ]
+      },
+      "locked": {
+        "lastModified": 1776333572,
+        "narHash": "sha256-c6HTsPfnJO50dxc2IYm3QhXiq+m/84a+DXP1iSG2wbI=",
+        "owner": "gepetto",
+        "repo": "nix",
+        "rev": "4b50161bbf3ba4091e83ef097a8c4f9a1421b8ba",
+        "type": "github"
+      },
+      "original": {
+        "owner": "gepetto",
+        "repo": "nix",
+        "type": "github"
+      }
+    },
     "gitignore": {
+      "inputs": {
+        "nixpkgs": [
+          "mc-panda",
+          "mc-rtc-nix",
+          "gepetto",
+          "system-manager",
+          "userborn",
+          "pre-commit-hooks-nix",
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1709087332,
+        "narHash": "sha256-HG2cCnktfHsKV0s4XW83gU3F57gaTljL9KNSuG6bnQs=",
+        "owner": "hercules-ci",
+        "repo": "gitignore.nix",
+        "rev": "637db329424fd7e46cf4185293b9cc8c88c95394",
+        "type": "github"
+      },
+      "original": {
+        "owner": "hercules-ci",
+        "repo": "gitignore.nix",
+        "type": "github"
+      }
+    },
+    "gitignore_2": {
       "inputs": {
         "nixpkgs": [
           "mc-rtc-nix",
@@ -270,6 +554,30 @@
       }
     },
     "home-manager": {
+      "inputs": {
+        "nixpkgs": [
+          "mc-panda",
+          "mc-rtc-nix",
+          "gepetto",
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1775425411,
+        "narHash": "sha256-KY6HsebJHEe5nHOWP7ur09mb0drGxYSzE3rQxy62rJo=",
+        "owner": "nix-community",
+        "repo": "home-manager",
+        "rev": "0d02ec1d0a05f88ef9e74b516842900c41f0f2fe",
+        "type": "github"
+      },
+      "original": {
+        "owner": "nix-community",
+        "ref": "release-25.11",
+        "repo": "home-manager",
+        "type": "github"
+      }
+    },
+    "home-manager_2": {
       "inputs": {
         "nixpkgs": [
           "mc-rtc-nix",
@@ -312,15 +620,118 @@
         "type": "github"
       }
     },
+    "jrl-cmakemodulesv2_2": {
+      "inputs": {
+        "flake-parts": "flake-parts_6",
+        "nixpkgs": "nixpkgs_4"
+      },
+      "locked": {
+        "lastModified": 1775813418,
+        "narHash": "sha256-bzC87q+GD4gCT6wv/KYllLgppumAqQ7CxAZ3i0K52xY=",
+        "owner": "ahoarau",
+        "repo": "jrl-cmakemodules",
+        "rev": "a96e159c31365b462c7aafdae3255e58fee201e9",
+        "type": "github"
+      },
+      "original": {
+        "owner": "ahoarau",
+        "ref": "jrl-next",
+        "repo": "jrl-cmakemodules",
+        "type": "github"
+      }
+    },
+    "mc-panda": {
+      "inputs": {
+        "flake-parts": [
+          "mc-panda",
+          "mc-rtc-nix",
+          "flake-parts"
+        ],
+        "mc-rtc-nix": "mc-rtc-nix",
+        "systems": [
+          "mc-panda",
+          "mc-rtc-nix",
+          "systems"
+        ]
+      },
+      "locked": {
+        "lastModified": 1776358322,
+        "narHash": "sha256-PQh3kkU9bdLPhaBw7kbYQY7Wa4lU95zM6lHYzS8/77k=",
+        "owner": "jrl-umi3218",
+        "repo": "mc_panda",
+        "rev": "86a361aefe3fc9340cab3946d9aac14c502b6d0a",
+        "type": "github"
+      },
+      "original": {
+        "owner": "jrl-umi3218",
+        "ref": "pull/17/head",
+        "repo": "mc_panda",
+        "type": "github"
+      }
+    },
+    "mc-panda-lirmm": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1776344178,
+        "narHash": "sha256-vS6DvFoXMQ2SE9O9ZgH1gWxmSO3tO88AcW7dh4fbEAg=",
+        "owner": "jrl-umi3218",
+        "repo": "mc_panda_lirmm",
+        "rev": "b9c7bbcd37d9b5c430916f9306cc8cfd05d04abb",
+        "type": "github"
+      },
+      "original": {
+        "owner": "jrl-umi3218",
+        "ref": "pull/16/head",
+        "repo": "mc_panda_lirmm",
+        "type": "github"
+      }
+    },
     "mc-rtc-nix": {
       "inputs": {
         "flake-parts": [
+          "mc-panda",
           "mc-rtc-nix",
           "gepetto",
           "flake-parts"
         ],
         "gepetto": "gepetto",
         "jrl-cmakemodulesv2": "jrl-cmakemodulesv2",
+        "nixpkgs": [
+          "mc-panda",
+          "mc-rtc-nix",
+          "gepetto",
+          "nixpkgs"
+        ],
+        "systems": [
+          "mc-panda",
+          "mc-rtc-nix",
+          "gepetto",
+          "systems"
+        ]
+      },
+      "locked": {
+        "lastModified": 1776264718,
+        "narHash": "sha256-3NSXyoIavX9ytZyCO1CwaYRBIVAKPCNn6SwiWtoTUlc=",
+        "owner": "mc-rtc",
+        "repo": "nixpkgs",
+        "rev": "b4cefc0ad03a48a6fcf87f46017d46c780944543",
+        "type": "github"
+      },
+      "original": {
+        "owner": "mc-rtc",
+        "repo": "nixpkgs",
+        "type": "github"
+      }
+    },
+    "mc-rtc-nix_2": {
+      "inputs": {
+        "flake-parts": [
+          "mc-rtc-nix",
+          "gepetto",
+          "flake-parts"
+        ],
+        "gepetto": "gepetto_2",
+        "jrl-cmakemodulesv2": "jrl-cmakemodulesv2_2",
         "nixpkgs": [
           "mc-rtc-nix",
           "gepetto",
@@ -333,11 +744,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1776173535,
-        "narHash": "sha256-zeRHy4L/D9lKiPNACbJeR+grlwmxCe3Sg+bFXnRz/u4=",
+        "lastModified": 1776440558,
+        "narHash": "sha256-QQNgfC/8c8c9gpaV1w2KbJbsd+l1Oc+m9/zhXWvB5FM=",
         "owner": "mc-rtc",
         "repo": "nixpkgs",
-        "rev": "324ff0dc48194e93437f88210c7649789ff7106e",
+        "rev": "82b05d6b29d6babc630edb43cc4bb28eaf712c5f",
         "type": "github"
       },
       "original": {
@@ -366,7 +777,50 @@
         "type": "github"
       }
     },
+    "nix-ros-overlay_2": {
+      "inputs": {
+        "flake-utils": "flake-utils_2",
+        "nixpkgs": "nixpkgs_3"
+      },
+      "locked": {
+        "lastModified": 1775764892,
+        "narHash": "sha256-l1UbHppd5KaU4K/TQPIXf9wnVifH4Tgrx5z2GFoq/bw=",
+        "owner": "lopsided98",
+        "repo": "nix-ros-overlay",
+        "rev": "0a4e8cf51001d2d1c613f95dadd3853da42c0164",
+        "type": "github"
+      },
+      "original": {
+        "owner": "lopsided98",
+        "ref": "develop",
+        "repo": "nix-ros-overlay",
+        "type": "github"
+      }
+    },
     "nix-system-graphics": {
+      "inputs": {
+        "nixpkgs": [
+          "mc-panda",
+          "mc-rtc-nix",
+          "gepetto",
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1763296639,
+        "narHash": "sha256-K9JBscC7ApwCnl0wR0sVkxrKFsoDYVqXN5fOujvyBWA=",
+        "owner": "soupglasses",
+        "repo": "nix-system-graphics",
+        "rev": "ac37f0f3ec0cb15d63a520918433c794d01d9dac",
+        "type": "github"
+      },
+      "original": {
+        "owner": "soupglasses",
+        "repo": "nix-system-graphics",
+        "type": "github"
+      }
+    },
+    "nix-system-graphics_2": {
       "inputs": {
         "nixpkgs": [
           "mc-rtc-nix",
@@ -434,7 +888,69 @@
         "type": "github"
       }
     },
+    "nixpkgs-lib_3": {
+      "locked": {
+        "lastModified": 1774748309,
+        "narHash": "sha256-+U7gF3qxzwD5TZuANzZPeJTZRHS29OFQgkQ2kiTJBIQ=",
+        "owner": "nix-community",
+        "repo": "nixpkgs.lib",
+        "rev": "333c4e0545a6da976206c74db8773a1645b5870a",
+        "type": "github"
+      },
+      "original": {
+        "owner": "nix-community",
+        "repo": "nixpkgs.lib",
+        "type": "github"
+      }
+    },
+    "nixpkgs-lib_4": {
+      "locked": {
+        "lastModified": 1774748309,
+        "narHash": "sha256-+U7gF3qxzwD5TZuANzZPeJTZRHS29OFQgkQ2kiTJBIQ=",
+        "owner": "nix-community",
+        "repo": "nixpkgs.lib",
+        "rev": "333c4e0545a6da976206c74db8773a1645b5870a",
+        "type": "github"
+      },
+      "original": {
+        "owner": "nix-community",
+        "repo": "nixpkgs.lib",
+        "type": "github"
+      }
+    },
     "nixpkgs_2": {
+      "locked": {
+        "lastModified": 1775036866,
+        "narHash": "sha256-ZojAnPuCdy657PbTq5V0Y+AHKhZAIwSIT2cb8UgAz/U=",
+        "owner": "NixOS",
+        "repo": "nixpkgs",
+        "rev": "6201e203d09599479a3b3450ed24fa81537ebc4e",
+        "type": "github"
+      },
+      "original": {
+        "owner": "NixOS",
+        "ref": "nixos-unstable",
+        "repo": "nixpkgs",
+        "type": "github"
+      }
+    },
+    "nixpkgs_3": {
+      "locked": {
+        "lastModified": 1771369470,
+        "narHash": "sha256-0NBlEBKkN3lufyvFegY4TYv5mCNHbi5OmBDrzihbBMQ=",
+        "owner": "NixOS",
+        "repo": "nixpkgs",
+        "rev": "0182a361324364ae3f436a63005877674cf45efb",
+        "type": "github"
+      },
+      "original": {
+        "owner": "NixOS",
+        "ref": "nixos-unstable",
+        "repo": "nixpkgs",
+        "type": "github"
+      }
+    },
+    "nixpkgs_4": {
       "locked": {
         "lastModified": 1775036866,
         "narHash": "sha256-ZojAnPuCdy657PbTq5V0Y+AHKhZAIwSIT2cb8UgAz/U=",
@@ -453,6 +969,7 @@
     "pre-commit-hooks-nix": {
       "inputs": {
         "flake-compat": [
+          "mc-panda",
           "mc-rtc-nix",
           "gepetto",
           "system-manager",
@@ -460,6 +977,39 @@
           "flake-compat"
         ],
         "gitignore": "gitignore",
+        "nixpkgs": [
+          "mc-panda",
+          "mc-rtc-nix",
+          "gepetto",
+          "system-manager",
+          "userborn",
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1769069492,
+        "narHash": "sha256-Efs3VUPelRduf3PpfPP2ovEB4CXT7vHf8W+xc49RL/U=",
+        "owner": "cachix",
+        "repo": "pre-commit-hooks.nix",
+        "rev": "a1ef738813b15cf8ec759bdff5761b027e3e1d23",
+        "type": "github"
+      },
+      "original": {
+        "owner": "cachix",
+        "repo": "pre-commit-hooks.nix",
+        "type": "github"
+      }
+    },
+    "pre-commit-hooks-nix_2": {
+      "inputs": {
+        "flake-compat": [
+          "mc-rtc-nix",
+          "gepetto",
+          "system-manager",
+          "userborn",
+          "flake-compat"
+        ],
+        "gitignore": "gitignore_2",
         "nixpkgs": [
           "mc-rtc-nix",
           "gepetto",
@@ -483,6 +1033,44 @@
       }
     },
     "pyproject-build-systems": {
+      "inputs": {
+        "nixpkgs": [
+          "mc-panda",
+          "mc-rtc-nix",
+          "gepetto",
+          "gazebros2nix",
+          "nixpkgs"
+        ],
+        "pyproject-nix": [
+          "mc-panda",
+          "mc-rtc-nix",
+          "gepetto",
+          "gazebros2nix",
+          "pyproject-nix"
+        ],
+        "uv2nix": [
+          "mc-panda",
+          "mc-rtc-nix",
+          "gepetto",
+          "gazebros2nix",
+          "uv2nix"
+        ]
+      },
+      "locked": {
+        "lastModified": 1773870109,
+        "narHash": "sha256-ZoTdqZP03DcdoyxvpFHCAek4bkPUTUPUF3oCCgc3dP4=",
+        "owner": "pyproject-nix",
+        "repo": "build-system-pkgs",
+        "rev": "b6e74f433b02fa4b8a7965ee24680f4867e2926f",
+        "type": "github"
+      },
+      "original": {
+        "owner": "pyproject-nix",
+        "repo": "build-system-pkgs",
+        "type": "github"
+      }
+    },
+    "pyproject-build-systems_2": {
       "inputs": {
         "nixpkgs": [
           "mc-rtc-nix",
@@ -520,6 +1108,30 @@
     "pyproject-nix": {
       "inputs": {
         "nixpkgs": [
+          "mc-panda",
+          "mc-rtc-nix",
+          "gepetto",
+          "gazebros2nix",
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1775439158,
+        "narHash": "sha256-NHY9SJNU019n+8NCabBDtmuzRFeE2gZlYKHowp9bV24=",
+        "owner": "pyproject-nix",
+        "repo": "pyproject.nix",
+        "rev": "fb6b728260f3f32761367e9fd1e1a25b4245bcd0",
+        "type": "github"
+      },
+      "original": {
+        "owner": "pyproject-nix",
+        "repo": "pyproject.nix",
+        "type": "github"
+      }
+    },
+    "pyproject-nix_2": {
+      "inputs": {
+        "nixpkgs": [
           "mc-rtc-nix",
           "gepetto",
           "gazebros2nix",
@@ -546,7 +1158,9 @@
           "mc-rtc-nix",
           "flake-parts"
         ],
-        "mc-rtc-nix": "mc-rtc-nix",
+        "mc-panda": "mc-panda",
+        "mc-panda-lirmm": "mc-panda-lirmm",
+        "mc-rtc-nix": "mc-rtc-nix_2",
         "systems": [
           "mc-rtc-nix",
           "systems"
@@ -557,11 +1171,36 @@
       "inputs": {
         "flake-compat": "flake-compat",
         "nixpkgs": [
+          "mc-panda",
           "mc-rtc-nix",
           "gepetto",
           "nixpkgs"
         ],
         "userborn": "userborn"
+      },
+      "locked": {
+        "lastModified": 1776108115,
+        "narHash": "sha256-QDa17vvigUyEAk/kTkDHOBFqmbWIe7aZDCjSgl9BG2c=",
+        "owner": "numtide",
+        "repo": "system-manager",
+        "rev": "e028253c2f1ea1b3eba2ce84ae8f770d823fe4ac",
+        "type": "github"
+      },
+      "original": {
+        "owner": "numtide",
+        "repo": "system-manager",
+        "type": "github"
+      }
+    },
+    "system-manager_2": {
+      "inputs": {
+        "flake-compat": "flake-compat_2",
+        "nixpkgs": [
+          "mc-rtc-nix",
+          "gepetto",
+          "nixpkgs"
+        ],
+        "userborn": "userborn_2"
       },
       "locked": {
         "lastModified": 1776108115,
@@ -607,7 +1246,62 @@
         "type": "github"
       }
     },
+    "systems_3": {
+      "locked": {
+        "lastModified": 1681028828,
+        "narHash": "sha256-Vy1rq5AaRuLzOxct8nz4T6wlgyUR7zLU309k9mBC768=",
+        "owner": "nix-systems",
+        "repo": "default",
+        "rev": "da67096a3b9bf56a91d16901293e51ba5b49a27e",
+        "type": "github"
+      },
+      "original": {
+        "owner": "nix-systems",
+        "repo": "default",
+        "type": "github"
+      }
+    },
+    "systems_4": {
+      "locked": {
+        "lastModified": 1681028828,
+        "narHash": "sha256-Vy1rq5AaRuLzOxct8nz4T6wlgyUR7zLU309k9mBC768=",
+        "owner": "nix-systems",
+        "repo": "default",
+        "rev": "da67096a3b9bf56a91d16901293e51ba5b49a27e",
+        "type": "github"
+      },
+      "original": {
+        "owner": "nix-systems",
+        "repo": "default",
+        "type": "github"
+      }
+    },
     "treefmt-nix": {
+      "inputs": {
+        "nixpkgs": [
+          "mc-panda",
+          "mc-rtc-nix",
+          "gepetto",
+          "gazebros2nix",
+          "flakoboros",
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1775636079,
+        "narHash": "sha256-pc20NRoMdiar8oPQceQT47UUZMBTiMdUuWrYu2obUP0=",
+        "owner": "numtide",
+        "repo": "treefmt-nix",
+        "rev": "790751ff7fd3801feeaf96d7dc416a8d581265ba",
+        "type": "github"
+      },
+      "original": {
+        "owner": "numtide",
+        "repo": "treefmt-nix",
+        "type": "github"
+      }
+    },
+    "treefmt-nix_2": {
       "inputs": {
         "nixpkgs": [
           "mc-rtc-nix",
@@ -634,6 +1328,7 @@
     "userborn": {
       "inputs": {
         "flake-compat": [
+          "mc-panda",
           "mc-rtc-nix",
           "gepetto",
           "system-manager",
@@ -641,6 +1336,7 @@
         ],
         "flake-parts": "flake-parts_2",
         "nixpkgs": [
+          "mc-panda",
           "mc-rtc-nix",
           "gepetto",
           "system-manager",
@@ -664,7 +1360,71 @@
         "type": "github"
       }
     },
+    "userborn_2": {
+      "inputs": {
+        "flake-compat": [
+          "mc-rtc-nix",
+          "gepetto",
+          "system-manager",
+          "flake-compat"
+        ],
+        "flake-parts": "flake-parts_5",
+        "nixpkgs": [
+          "mc-rtc-nix",
+          "gepetto",
+          "system-manager",
+          "nixpkgs"
+        ],
+        "pre-commit-hooks-nix": "pre-commit-hooks-nix_2",
+        "systems": "systems_4"
+      },
+      "locked": {
+        "lastModified": 1770377964,
+        "narHash": "sha256-q2pnlX2IW0kg80GLFnwWd/GigIpkuZnyKPLhrgJql3E=",
+        "owner": "jfroche",
+        "repo": "userborn",
+        "rev": "55c2cd7952c207a62736a5bbd9499ea73da18d24",
+        "type": "github"
+      },
+      "original": {
+        "owner": "jfroche",
+        "ref": "system-manager",
+        "repo": "userborn",
+        "type": "github"
+      }
+    },
     "uv2nix": {
+      "inputs": {
+        "nixpkgs": [
+          "mc-panda",
+          "mc-rtc-nix",
+          "gepetto",
+          "gazebros2nix",
+          "nixpkgs"
+        ],
+        "pyproject-nix": [
+          "mc-panda",
+          "mc-rtc-nix",
+          "gepetto",
+          "gazebros2nix",
+          "pyproject-nix"
+        ]
+      },
+      "locked": {
+        "lastModified": 1775706324,
+        "narHash": "sha256-BTb4sydzX2B5/oNbvCdQFeSbk97xEnbb8bk84CiKCOs=",
+        "owner": "pyproject-nix",
+        "repo": "uv2nix",
+        "rev": "5707df99097375896a3dda811d492a2fabe63500",
+        "type": "github"
+      },
+      "original": {
+        "owner": "pyproject-nix",
+        "repo": "uv2nix",
+        "type": "github"
+      }
+    },
+    "uv2nix_2": {
       "inputs": {
         "nixpkgs": [
           "mc-rtc-nix",

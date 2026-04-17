@@ -59,7 +59,7 @@ void PandaProsthetics::reset(const mc_control::ControllerResetData & reset_data)
 
     // Manually compensate for most of the calibration offset
     // however the issue is most likely in the robot's kinematics model itself
-    auto calibOffsetWorld = sva::PTransformd::Identity(); 
+    auto calibOffsetWorld = sva::PTransformd::Identity();
     // calibOffsetWorld.translation().x() = 0.0;
     // calibOffsetWorld.translation().y() = -0.015;
     // calibOffsetWorld.translation().z() = 0.01;
