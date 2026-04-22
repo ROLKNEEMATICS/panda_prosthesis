@@ -237,6 +237,15 @@ struct Serial
   virtual void close_serial_port() = 0;
   virtual bool connected() = 0;
   virtual void read_serial_port() = 0;
+  bool running() const noexcept
+  {
+    return running_;
+  }
+
+  void disconnect()
+  {
+    running_ = false;
+  }
 
   inline bool lastFrameUpdated() const noexcept
   {
@@ -307,20 +316,20 @@ protected: /* Serial stream thread */
 
   void runThread()
   {
+    running_ = true;
     try
     {
       open_serial_port();
     }
-    catch(std::runtime_error & e)
+    catch(const std::exception & e)
     {
-      mc_rtc::log::error("[Serial] Failed to open serial port {}, sensor values will not be available\nDetails: {}",
-                         portName, e.what());
-      return;
+      mc_rtc::log::error("Failed to open serial port '{}', reason: {}", portName, e.what());
+      running_ = false;
     }
 
     const auto period = std::chrono::milliseconds(1); // 1000Hz = 1ms period
 
-    while(true)
+    while(running_)
     {
       auto loop_start = std::chrono::steady_clock::now();
 
@@ -356,6 +365,7 @@ protected: /* Serial stream thread */
   }
 
 protected:
+  bool running_ = false;
   int serialPort;
   double alphaFilter_ = 0.3;
 };

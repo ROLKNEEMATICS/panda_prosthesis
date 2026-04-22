@@ -9,3 +9,6 @@ rate: 200 # Rate at which the plugin looks for new data
 # For ProtoTMRSerial
 serial_port_baud_rate: 115200
 serial_port_name: "/dev/ttyACM0"
+# If true, require reading data from the real sensor
+# If false, try reading from the real sensor, but if it fails, simply return empty data
+sensorRequired: true

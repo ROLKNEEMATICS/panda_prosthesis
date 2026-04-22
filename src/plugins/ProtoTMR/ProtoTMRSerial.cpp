@@ -75,22 +75,6 @@ bool ProtoTMRSerial::connected()
   {
     isConnected = false;
   }
-  /*
-  int status;
-
-  if(ioctl(serialPort, TIOCMGET, &status) == -1)
-  {
-    // Error in getting port status
-    mc_rtc::log::error("[ProtoTMRSerial] Error getting serial port status !");
-    return false;
-  }
-  //mc_rtc::log::error("[ProtoTMRSerial] Serial port status : {}",
-                     //(status & TIOCM_CAR) != 0 ? "Connected" : "Disconnected");
-  // Check the Data Carrier Detect (DCD) signal
-  return (status & TIOCM_CAR) != 0;*/
-
-  // bool status = serialPort.is_open() && serialPort.good();
-  // return true;
   return isConnected;
 }
 
