@@ -17,7 +17,7 @@ static unsigned char buffer[BUFFER_SIZE];
 // 10 timestamps per sensor
 // 10 readings per sensor
 ProtoTMRSerial::ProtoTMRSerial(const std::string & portName, const int baudRate)
-: Serial(portName, baudRate, 23, 10 + 10)
+: Serial(portName, baudRate, ProtoTMRSerial::SENSOR_COUNT, ProtoTMRSerial::MEASUREMENTS_PER_SENSOR)
 {
   avg_buffer.resize(SENSOR_COUNT, 0);
 }

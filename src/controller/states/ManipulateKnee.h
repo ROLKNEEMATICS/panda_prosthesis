@@ -173,6 +173,7 @@ protected:
 
   bool gotMeasurement_ = false;
   std::string sensorType = "None";
+  bool allowMissingSensor_ = false;
   size_t iter_ = 0;
   size_t iterRate_ = 1;
 

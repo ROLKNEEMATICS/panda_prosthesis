@@ -270,21 +270,30 @@ void ManipulateKnee::start(mc_control::fsm::Controller & ctl)
   saveResultsThreadRunning_ = true;
   saveResultsThread_ = std::thread(&ManipulateKnee::saveResultsThread, this);
 
-  if(ctl.datastore().has("BoneTagSerialPlugin::Connected")
-     && ctl.datastore().call<bool>("BoneTagSerialPlugin::Connected"))
+  config_("allow_missing_sensor", allowMissingSensor_);
+  // FIXME: temporarely force ProtoTMRPlugin without sensor plugged
+  allowMissingSensor_ = true;
+  sensorType = "ProtoTMRPlugin";
+
+  if(!allowMissingSensor_)
   {
-    sensorType = "BoneTagSerialPlugin";
-    mc_rtc::log::success("[{}] Detected connected sensor type: {}", name(), sensorType);
-  }
-  else if(ctl.datastore().has("ProtoTMRPlugin::Connected") && ctl.datastore().call<bool>("ProtoTMRPlugin::Connected"))
-  {
-    sensorType = "ProtoTMRPlugin";
-    mc_rtc::log::success("[{}] Detected connected sensor type: {}", name(), sensorType);
-  }
-  else
-  {
-    mc_rtc::log::warning("[{}] No sensor type found in datastore, defaulting to 'None'", name());
-    measure_ = false;
+  // END FIXME
+    if(ctl.datastore().has("BoneTagSerialPlugin::Connected")
+       && ctl.datastore().call<bool>("BoneTagSerialPlugin::Connected"))
+    {
+      sensorType = "BoneTagSerialPlugin";
+      mc_rtc::log::success("[{}] Detected connected sensor type: {}", name(), sensorType);
+    }
+    else if(ctl.datastore().has("ProtoTMRPlugin::Connected") && ctl.datastore().call<bool>("ProtoTMRPlugin::Connected"))
+    {
+      sensorType = "ProtoTMRPlugin";
+      mc_rtc::log::success("[{}] Detected connected sensor type: {}", name(), sensorType);
+    }
+    else
+    {
+      mc_rtc::log::warning("[{}] No sensor type found in datastore, defaulting to 'None'", name());
+      measure_ = false;
+    }
   }
 
   if(config_.has("femur"))
