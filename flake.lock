@@ -655,11 +655,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1776358322,
-        "narHash": "sha256-PQh3kkU9bdLPhaBw7kbYQY7Wa4lU95zM6lHYzS8/77k=",
+        "lastModified": 1776445386,
+        "narHash": "sha256-OAps22tMm+ByKHgSd00LgQPYtHdbz5LmpOfB07iWgB8=",
         "owner": "jrl-umi3218",
         "repo": "mc_panda",
-        "rev": "86a361aefe3fc9340cab3946d9aac14c502b6d0a",
+        "rev": "37633f56837b8f2c0594923c266224dad7e35f38",
         "type": "github"
       },
       "original": {
@@ -744,11 +744,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1776440558,
-        "narHash": "sha256-QQNgfC/8c8c9gpaV1w2KbJbsd+l1Oc+m9/zhXWvB5FM=",
+        "lastModified": 1776502416,
+        "narHash": "sha256-XIUzDcHFlo1QH+ANQtEEBiwYpuhf9t1hRYYPoEdZGo0=",
         "owner": "mc-rtc",
         "repo": "nixpkgs",
-        "rev": "82b05d6b29d6babc630edb43cc4bb28eaf712c5f",
+        "rev": "0a04121f6c78bf1f796447d5078a65e373a94109",
         "type": "github"
       },
       "original": {

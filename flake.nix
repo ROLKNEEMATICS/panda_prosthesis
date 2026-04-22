@@ -47,11 +47,11 @@
                 src = lib.cleanSource ./.;
               };
 
-              overrideAttrs.mc-rtc =
-              { pkgs-prev, pkgs-final, drv-prev, ... }:
-              {
-                propagateBuildInputs = drv-prev.propagatedBuildInputs ++ [ pkgs-final.fmt ];
-              };
+              # overrideAttrs.mc-rtc =
+              # { pkgs-prev, pkgs-final, drv-prev, ... }:
+              # {
+              #   propagateBuildInputs = drv-prev.propagatedBuildInputs ++ [ pkgs-final.fmt ];
+              # };
 
               # overrides override package function arguments, while overrideAttrs overrides the attribute set
               overrides.mc-rtc-superbuild =
