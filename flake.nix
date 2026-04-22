@@ -35,7 +35,10 @@
                 # "ament-cmake"
                 # "mc-rtc-magnum"
               ];
-              extraDevPackages = [ "pkg-config" "fmt" ];
+              extraDevPackages = [
+                "pkg-config"
+                "fmt"
+              ];
               overrideAttrs.mc-panda = {
                 src = inputs.mc-panda;
               };
@@ -60,8 +63,7 @@
                   cfg-prev = pkgs-prev.mc-rtc-superbuild.superbuildArgs;
                 in
                 {
-                  superbuildArgs = cfg-prev //
-                  {
+                  superbuildArgs = cfg-prev // {
                     pname = "panda-prosthesis-superbuild";
                     traceRuntimeDependencies = true;
                     robots = [
