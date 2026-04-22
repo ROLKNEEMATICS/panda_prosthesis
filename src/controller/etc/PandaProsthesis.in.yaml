@@ -321,36 +321,18 @@ collisions:
 ObserverPipelines:
   - name: PandaFemur
     observers:
-    - type: BodySensor
-      config:
-        robot: panda_femur
-        method: control
     - type: Encoder
-      config:
-        robot: panda_femur
-        position: encoderValues
-        #velocity: encoderFiniteDifferences
-        #velocity: encoderVelocities
-        velocity: control
+      robot: panda_femur
+      position: encoderValues
+      # position: control
+      velocity: control # encoderVelocities
   - name: PandaTibia
     observers:
-    - type: BodySensor
-      config:
-        robot: panda_tibia
-        method: control
-        log:
-          position: true
-          velocity: true
     - type: Encoder
-      config:
-        robot: panda_tibia
-        position: encoderValues
-        #velocity: encoderFiniteDifferences
-        # velocity: encoderVelocities
-        velocity: control # encoderVelocities
-        log:
-          position: true
-          velocity: true
+      robot: panda_tibia
+      position: encoderValues
+      # position: control
+      velocity: control # encoderVelocities
 
 # Initial set of contacts
 contacts: []
