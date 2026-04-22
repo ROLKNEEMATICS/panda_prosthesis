@@ -9,6 +9,11 @@ add_fsm_state_simple(Calibrate)
 target_include_directories(Calibrate PUBLIC $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/../include>)
 add_fsm_state_simple(ManipulateKnee)
 target_include_directories(ManipulateKnee PUBLIC $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/../include>)
+
+install(FILES data/bonetag.yaml
+    DESTINATION "${MC_STATES_RUNTIME_INSTALL_PREFIX}/data"
+)
+
 endif()
 
 if(TARGET PandaBraceController)
@@ -27,6 +32,8 @@ target_include_directories(SaveCalibration PUBLIC $<BUILD_INTERFACE:${CMAKE_CURR
 add_fsm_state_simple(CalibrateRelative)
 target_link_libraries(CalibrateRelative PUBLIC state-observation::state-observation)
 set_target_properties(CalibrateRelative PROPERTIES INSTALL_RPATH ${MC_STATES_RUNTIME_INSTALL_PREFIX})
-endif()
 
-add_fsm_data_directory(data)
+install(FILES data/brace_choice.yaml data/brace.yaml
+  DESTINATION "${MC_STATES_RUNTIME_INSTALL_PREFIX}/data"
+)
+endif()
