@@ -351,7 +351,9 @@ Plugins: [ProtoTMRPlugin]
 ProtoTMRPlugin:
   # When false, allow to record measurements as-if the sensor was connected even if it isn't
   # sensor data will be zero
-  sensorRequired: false
+  # FIXME: when sensorRequired = false, we always have gotFullFrame = true
+  # this causes the logging to log at every iteration
+  sensorRequired: true
 
 transitions:
   - [ChooseMode, Simulation, Simulation, Auto]

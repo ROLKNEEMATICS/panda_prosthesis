@@ -327,21 +327,9 @@ protected: /* Serial stream thread */
       running_ = false;
     }
 
-    const auto period = std::chrono::milliseconds(1); // 1000Hz = 1ms period
-
     while(running_)
     {
-      auto loop_start = std::chrono::steady_clock::now();
-
       read_serial_port();
-
-      auto loop_end = std::chrono::steady_clock::now();
-      auto elapsed = std::chrono::duration_cast<std::chrono::milliseconds>(loop_end - loop_start);
-
-      if(elapsed < period)
-      {
-        std::this_thread::sleep_for(period - elapsed);
-      }
     }
 
     close_serial_port();

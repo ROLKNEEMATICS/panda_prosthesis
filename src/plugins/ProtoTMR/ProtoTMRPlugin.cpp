@@ -62,6 +62,8 @@ void ProtoTMRPlugin::init(mc_control::MCGlobalController & gc, const mc_rtc::Con
                                                 "[ProtoTMRPlugin::GotNewFrame] Requesting new frame, but no serial "
                                                 "connection is active and sensorRequired=true");
                                           }
+                                          // mc_rtc::log::info("[ProtoTMRSerial::GotNewFrame]: sensorRequired: {},
+                                          // gotFullFrame: {}", sensorRequired_, serial_->gotFullFrame());
                                           return sensorRequired_ ? serial_->gotFullFrame() : true;
                                         });
   gc.controller().datastore().make_call(

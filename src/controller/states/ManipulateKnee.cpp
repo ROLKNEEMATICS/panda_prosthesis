@@ -168,12 +168,11 @@ void write_csv_prototmr(const std::vector<ProtoTMRResult> & results, const std::
          "femur_x,femur_y,femur_z,"
          "tibia_x,tibia_y,tibia_z,sensor_id";
 
-  size_t dataSize = results.front().sensorData.data.size();
-  size_t halfSize = dataSize / 2;
+  size_t dataSize = results.front().sensorData.data.front().size(); // number of measurement per sensor
 
-  for(size_t i = 0; i < halfSize - 1; ++i)
+  for(size_t i = 0; i < dataSize; ++i)
   {
-    csv << ",sensor_time_" << i << ",sensor_value_" << i;
+    csv << ",sensor_value_" << i;
   }
   csv << std::endl;
 
@@ -248,6 +247,7 @@ void ManipulateKnee::saveResultsThread()
   while(saveResultsThreadRunning_)
   {
     saveResultsCv_.wait(lock);
+    mc_rtc::log::info("[{}] Got request to save data, saving...", name());
 
     if(sensorType_ == "ProtoTMRPlugin")
     {
@@ -262,6 +262,7 @@ void ManipulateKnee::saveResultsThread()
       mc_rtc::log::warning("[{}] Unknown sensor type '{}', cannot save results", name(), sensorType_);
       return;
     }
+    mc_rtc::log::info("[{}] Saving finished", name());
   }
 }
 
@@ -319,7 +320,7 @@ void ManipulateKnee::start(mc_control::fsm::Controller & ctl)
     c("maxRotation", maxTibiaRotation_);
   }
 
-  setRate(config_("rate", 0.2), ctl.timeStep);
+  iterRate_ = iterRateFromSeconds(config_("rate", 0.2), ctl.timeStep);
   config_("samples", desiredSamples_);
 
   if(auto convergenceC = config_.find("convergence"))
@@ -517,7 +518,7 @@ void ManipulateKnee::start(mc_control::fsm::Controller & ctl)
                             mc_rtc::gui::FormArrayInput("minFemurTranslation", false, minFemurTranslation_),
                             mc_rtc::gui::FormArrayInput("maxFemurTranslation", false, maxFemurTranslation_)));
 
-  ctl.gui()->addElement(this, {"ManipulateKnee"}, mc_rtc::gui::ElementsStacking::Horizontal,
+  ctl.gui()->addElement(this, {"ManipulateKnee", "Manual Logging"}, mc_rtc::gui::ElementsStacking::Horizontal,
                         mc_rtc::gui::Checkbox(
                             "Manual Logging", [this]() { return manualLogging_; }, [this]() {}),
                         mc_rtc::gui::Button("Start Logging",
@@ -586,8 +587,8 @@ void ManipulateKnee::start(mc_control::fsm::Controller & ctl)
                             "Samples", [this]() { return desiredSamples_; },
                             [this](double samples) { desiredSamples_ = std::max(1, static_cast<int>(samples)); }),
                         mc_rtc::gui::NumberInput(
-                            "Rate [s]", [this, &ctl]() { return getRate(ctl.timeStep); },
-                            [this, &ctl](double rate) { setRate(rate, ctl.timeStep); }));
+                            "Rate [s]", [this, &ctl]() { return iterRateToSeconds(iterRate_, ctl.timeStep); },
+                            [this, &ctl](double rate) { iterRate_ = iterRateFromSeconds(rate, ctl.timeStep); }));
 
   ctl.gui()->addElement(this, {"ManipulateKnee", "Trajectory", "Thresholds"},
                         mc_rtc::gui::NumberInput(
@@ -710,7 +711,8 @@ bool ManipulateKnee::measure(mc_control::fsm::Controller & ctl)
   if(!newFrameRequested_)
   {
     ctl.datastore().call(sensorType_ + "::RequestNewFrame");
-    mc_rtc::log::info("[{}] Requested new sensor data frame", name());
+    mc_rtc::log::info("[{}] Requested new sensor data frame at iter: {}, time: {}s", name(), controllerIter_,
+                      iterRateToSeconds(controllerIter_, ctl.timeStep));
     newFrameRequested_ = true;
   }
 
@@ -764,11 +766,12 @@ void ManipulateKnee::measure_prototmr(mc_control::fsm::Controller & ctl)
 {
   // We got a new frame
   auto sensorData = ctl.datastore().call<io::Serial::TimedRawData>(sensorType_ + "::GetLastFrame");
-  mc_rtc::log::success("[{}] Got new sensor data frame:", name());
-  for(unsigned i = 0; i < sensorData.data.size(); ++i)
-  {
-    mc_rtc::log::info("Sensor[{}]: {}", i, mc_rtc::io::to_string(sensorData.data[i]));
-  }
+  mc_rtc::log::success("[{}] Got new sensor data frame at iter: {}, time: {}s", name(), controllerIter_,
+                       iterRateToSeconds(controllerIter_, ctl.timeStep));
+  // for(unsigned i = 0; i < sensorData.data.size(); ++i)
+  // {
+  //   mc_rtc::log::info("Sensor[{}]: {}", i, mc_rtc::io::to_string(sensorData.data[i]));
+  // }
 
   ProtoTMRResult result;
   result.controllerIter = controllerIter_;
