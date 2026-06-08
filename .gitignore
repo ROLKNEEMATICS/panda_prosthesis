@@ -9,3 +9,5 @@ data/trajectories
 imgui.ini
 .direnv/
 result
+install/
+.superbuild/

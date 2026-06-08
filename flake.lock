@@ -672,11 +672,11 @@
     "mc-panda-lirmm": {
       "flake": false,
       "locked": {
-        "lastModified": 1776344178,
-        "narHash": "sha256-vS6DvFoXMQ2SE9O9ZgH1gWxmSO3tO88AcW7dh4fbEAg=",
+        "lastModified": 1779887182,
+        "narHash": "sha256-ZfuzySEfzr6MQPJGHQf7/7LoEy+wpYCfErFkqPJMvhM=",
         "owner": "jrl-umi3218",
         "repo": "mc_panda_lirmm",
-        "rev": "b9c7bbcd37d9b5c430916f9306cc8cfd05d04abb",
+        "rev": "449b8e1832cbc79490e3b784d381d3c0e731f6e7",
         "type": "github"
       },
       "original": {
@@ -744,15 +744,16 @@
         ]
       },
       "locked": {
-        "lastModified": 1776502416,
-        "narHash": "sha256-XIUzDcHFlo1QH+ANQtEEBiwYpuhf9t1hRYYPoEdZGo0=",
+        "lastModified": 1780934040,
+        "narHash": "sha256-U1qyDf/vKWKkINr6L8hI5U65xaUTehsn635YTpTrE1s=",
         "owner": "mc-rtc",
         "repo": "nixpkgs",
-        "rev": "0a04121f6c78bf1f796447d5078a65e373a94109",
+        "rev": "0c4373b944670a39c93023914cb1d4e080360722",
         "type": "github"
       },
       "original": {
         "owner": "mc-rtc",
+        "ref": "pull/44/head",
         "repo": "nixpkgs",
         "type": "github"
       }
