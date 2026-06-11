@@ -3,10 +3,11 @@
 
   inputs = {
     # mc-rtc-nix.url = "github:mc-rtc/nixpkgs";
-    # mc-rtc-nix.url = "github:mc-rtc/nixpkgs/pull/44/head"; # local devshell update
-    mc-rtc-nix.url = "path:/home/arnaud/devel/mc-rtc-nix/nixpkgs";
+    mc-rtc-nix.url = "github:mc-rtc/nixpkgs/pull/44/head"; # local devshell update
+    # mc-rtc-nix.url = "path:/home/arnaud/devel/mc-rtc-nix/nixpkgs";
     flake-parts.follows = "mc-rtc-nix/flake-parts";
     systems.follows = "mc-rtc-nix/systems";
+    gepetto.follows = "mc-rtc-nix/gepetto";
 
     mc-panda.url = "github:jrl-umi3218/mc_panda/pull/17/head";
     mc-panda-lirmm.url = "github:jrl-umi3218/mc_panda_lirmm/pull/16/head";
@@ -33,8 +34,39 @@
       {
         systems = import inputs.systems;
         imports = [
-          inputs.mc-rtc-nix.flakeModules.public
+          inputs.mc-rtc-nix.flakeModule
           {
+            # mc-rtc = {
+            #   # importPerSystem = false;
+            #   enableCcacheOverlay = true;
+            # };
+
+            mc-rtc-superbuild = {
+              enable = true;
+              pname = "panda-prosthesis-superbuild";
+              traceRuntimeDependencies = true;
+
+              # Pass a function that takes pkgs!
+              robots = pkgs: [
+                pkgs.mc-panda-lirmm
+                pkgs.mc-panda
+              ];
+
+              apps = pkgs: [
+                pkgs.mc-franka
+                pkgs.mc-rtc-magnum
+              ];
+
+              config = "lib/mc_controller/etc/panda_prosthesis/mc_rtc.yaml";
+
+              devel = {
+                controllers = pkgs: [ pkgs.panda-prosthesis ];
+                plugins = pkgs: [ pkgs.panda-prosthesis ];
+                robots = pkgs: [ pkgs.panda-prosthesis ];
+                config = "lib64/mc_controller/etc/panda_prosthesis/mc_rtc.yaml";
+              };
+            };
+
             flakoboros = {
               extraPackages = [
                 "ninja"
@@ -68,34 +100,11 @@
             };
           }
         ];
-        perSystem =
-          { pkgs, ... }:
-          {
-            programs.mc-rtc-superbuild = {
-              enable = true;
-              pname = "panda-prosthesis-superbuild";
-              traceRuntimeDependencies = true;
-
-              # Shared/Stable Base
-              robots = [
-                pkgs.mc-panda-lirmm
-                pkgs.mc-panda
-              ];
-              apps = with pkgs; [
-                mc-franka
-                mc-rtc-magnum
-              ];
-              config = "lib/mc_controller/etc/panda_prosthesis/mc_rtc.yaml";
-
-              devel = {
-                controllers = [ pkgs.panda-prosthesis ];
-                plugins = [ pkgs.panda-prosthesis ];
-                robots = [ pkgs.panda-prosthesis ];
-                config = "lib64/mc_controller/etc/panda_prosthesis/mc_rtc.yaml";
-              };
-            };
-            packages.default = pkgs.panda-prosthesis;
-          };
+        # perSystem =
+        #   { pkgs, ... }:
+        #   {
+        #     # packages.default = pkgs.panda-prosthesis;
+        #   };
       }
     );
 }

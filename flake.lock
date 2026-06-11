@@ -730,6 +730,11 @@
           "gepetto",
           "flake-parts"
         ],
+        "flakoboros": [
+          "mc-rtc-nix",
+          "gepetto",
+          "flakoboros"
+        ],
         "gepetto": "gepetto_2",
         "jrl-cmakemodulesv2": "jrl-cmakemodulesv2_2",
         "nixpkgs": [
@@ -744,11 +749,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1780934040,
-        "narHash": "sha256-U1qyDf/vKWKkINr6L8hI5U65xaUTehsn635YTpTrE1s=",
+        "lastModified": 1781138519,
+        "narHash": "sha256-GeHuE9bZwSybWf+LozeJdxg8J4+bEEq0Om4dAUXCsKA=",
         "owner": "mc-rtc",
         "repo": "nixpkgs",
-        "rev": "0c4373b944670a39c93023914cb1d4e080360722",
+        "rev": "0125b90d7ac36237d7efa6a6e31051ca61caf11d",
         "type": "github"
       },
       "original": {
@@ -1158,6 +1163,10 @@
         "flake-parts": [
           "mc-rtc-nix",
           "flake-parts"
+        ],
+        "gepetto": [
+          "mc-rtc-nix",
+          "gepetto"
         ],
         "mc-panda": "mc-panda",
         "mc-panda-lirmm": "mc-panda-lirmm",
