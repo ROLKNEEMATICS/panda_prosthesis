@@ -81,21 +81,6 @@
             };
           }
         ];
-        perSystem =
-          { ... }:
-          {
-            # # Example manual devShell creation
-            # devShells = {
-            #   mc-rtc-superbuild-module = pkgs.make-shell {
-            #     imports = [ inputs.mc-rtc-nix.flakeModules.superbuild ];
-            #     mc-rtc-superbuild = {
-            #       enable = true;
-            #       pname = "panda-prosthesis-superbuild-manual";
-            #     };
-            #   };
-            # };
-
-          };
       }
     );
 }
