@@ -36,28 +36,35 @@
         imports = [
           inputs.mc-rtc-nix.flakeModule
           {
-            # mc-rtc = {
-            #   # importPerSystem = false;
-            #   enableCcacheOverlay = true;
-            # };
+            mc-rtc-superbuild =
+              { pkgs, ... }:
+              {
+                enable = true;
+                pname = "panda-prosthesis-superbuild";
+                traceRuntimeDependencies = true;
+
+                # Pass a function that takes pkgs!
+                robots = [
+                  pkgs.mc-panda-lirmm
+                  pkgs.mc-panda
+                ];
+
+                apps = [
+                  pkgs.mc-franka
+                  pkgs.mc-rtc-magnum
+                ];
+
+                config = "lib/mc_controller/etc/panda_prosthesis/mc_rtc.yaml";
+
+                devel = {
+                  controllers = [ pkgs.panda-prosthesis ];
+                  plugins = [ pkgs.panda-prosthesis ];
+                  robots = [ pkgs.panda-prosthesis ];
+                  config = "lib64/mc_controller/etc/panda_prosthesis/mc_rtc.yaml";
+                };
+              };
 
             flakoboros = {
-              extraPackages = [
-                "ninja"
-                # FIXME: why are these needed here?
-                # "pkg-config"
-                # "rosidl-default-generators"
-                # # "geometry-msgs"
-                # "rosidl-default-runtime"
-                # "rosidl-typesupport-c"
-                # "rosidl-typesupport-cpp"
-                # "ament-cmake"
-                # "mc-rtc-magnum"
-              ];
-              extraDevPackages = [
-                "pkg-config"
-                "fmt"
-              ];
               overrideAttrs.mc-panda = {
                 src = inputs.mc-panda;
               };
@@ -75,42 +82,19 @@
           }
         ];
         perSystem =
-          { pkgs, ... }:
+          { ... }:
           {
-            # packages.default = pkgs.panda-prosthesis;
-            devShells = {
-              mc-rtc-superbuild-module = pkgs.make-shell {
-                # imports = [ ./modules/superbuild.nix ];
-                imports = [ inputs.mc-rtc-nix.flakeModules.superbuild ];
-                mc-rtc-superbuild = {
-                  enable = true;
-                  pname = "panda-prosthesis-superbuild";
-                  traceRuntimeDependencies = true;
+            # # Example manual devShell creation
+            # devShells = {
+            #   mc-rtc-superbuild-module = pkgs.make-shell {
+            #     imports = [ inputs.mc-rtc-nix.flakeModules.superbuild ];
+            #     mc-rtc-superbuild = {
+            #       enable = true;
+            #       pname = "panda-prosthesis-superbuild-manual";
+            #     };
+            #   };
+            # };
 
-                  # Pass a function that takes pkgs!
-                  robots = [
-                    pkgs.mc-panda-lirmm
-                    pkgs.mc-panda
-                  ];
-
-                  apps = [
-                    pkgs.mc-franka
-                    pkgs.mc-rtc-magnum
-                  ];
-
-                  config = "lib/mc_controller/etc/panda_prosthesis/mc_rtc.yaml";
-
-                  devel = {
-                    controllers = [ pkgs.panda-prosthesis ];
-                    plugins = [ pkgs.panda-prosthesis ];
-                    robots = [ pkgs.panda-prosthesis ];
-                    config = "lib64/mc_controller/etc/panda_prosthesis/mc_rtc.yaml";
-                  };
-                };
-
-              };
-
-            };
           };
       }
     );
