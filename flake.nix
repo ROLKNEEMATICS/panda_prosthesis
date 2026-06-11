@@ -32,7 +32,7 @@
     inputs.flake-parts.lib.mkFlake { inherit inputs; } (
       { lib, ... }:
       {
-        systems = import inputs.systems;
+        systems = [ "x86_64-linux" ];
         imports = [
           inputs.mc-rtc-nix.flakeModule
           {
