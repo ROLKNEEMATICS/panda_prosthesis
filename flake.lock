@@ -32,6 +32,22 @@
         "type": "github"
       }
     },
+    "flake-compat_3": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1696426674,
+        "narHash": "sha256-kvjfFW7WAETZlt09AgDn1MrtKzP7t90Vf7vypd3OL1U=",
+        "owner": "edolstra",
+        "repo": "flake-compat",
+        "rev": "0f9255e01c2351cc7d116c072cb317785dd33b33",
+        "type": "github"
+      },
+      "original": {
+        "owner": "edolstra",
+        "repo": "flake-compat",
+        "type": "github"
+      }
+    },
     "flake-parts": {
       "inputs": {
         "nixpkgs-lib": "nixpkgs-lib"
@@ -640,6 +656,24 @@
         "type": "github"
       }
     },
+    "make-shell": {
+      "inputs": {
+        "flake-compat": "flake-compat_3"
+      },
+      "locked": {
+        "lastModified": 1733933815,
+        "narHash": "sha256-9JjM7eT66W4NJAXpGUsdyAFXhBxFWR2Z9LZwUa7Hli0=",
+        "owner": "nicknovitski",
+        "repo": "make-shell",
+        "rev": "ffeceae9956df03571ea8e96ef77c2924f13a63c",
+        "type": "github"
+      },
+      "original": {
+        "owner": "nicknovitski",
+        "repo": "make-shell",
+        "type": "github"
+      }
+    },
     "mc-panda": {
       "inputs": {
         "flake-parts": [
@@ -737,6 +771,7 @@
         ],
         "gepetto": "gepetto_2",
         "jrl-cmakemodulesv2": "jrl-cmakemodulesv2_2",
+        "make-shell": "make-shell",
         "nixpkgs": [
           "mc-rtc-nix",
           "gepetto",
@@ -749,11 +784,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1781138519,
-        "narHash": "sha256-GeHuE9bZwSybWf+LozeJdxg8J4+bEEq0Om4dAUXCsKA=",
+        "lastModified": 1781193237,
+        "narHash": "sha256-RPd+LLnIzLAWF3dT2uOL9DTCnDuZucxEJCIjJAEF3cs=",
         "owner": "mc-rtc",
         "repo": "nixpkgs",
-        "rev": "0125b90d7ac36237d7efa6a6e31051ca61caf11d",
+        "rev": "49b36aed4199e92da1111b5e9de241ae59d33be1",
         "type": "github"
       },
       "original": {

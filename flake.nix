@@ -41,32 +41,6 @@
             #   enableCcacheOverlay = true;
             # };
 
-            mc-rtc-superbuild = {
-              enable = true;
-              pname = "panda-prosthesis-superbuild";
-              traceRuntimeDependencies = true;
-
-              # Pass a function that takes pkgs!
-              robots = pkgs: [
-                pkgs.mc-panda-lirmm
-                pkgs.mc-panda
-              ];
-
-              apps = pkgs: [
-                pkgs.mc-franka
-                pkgs.mc-rtc-magnum
-              ];
-
-              config = "lib/mc_controller/etc/panda_prosthesis/mc_rtc.yaml";
-
-              devel = {
-                controllers = pkgs: [ pkgs.panda-prosthesis ];
-                plugins = pkgs: [ pkgs.panda-prosthesis ];
-                robots = pkgs: [ pkgs.panda-prosthesis ];
-                config = "lib64/mc_controller/etc/panda_prosthesis/mc_rtc.yaml";
-              };
-            };
-
             flakoboros = {
               extraPackages = [
                 "ninja"
@@ -100,11 +74,44 @@
             };
           }
         ];
-        # perSystem =
-        #   { pkgs, ... }:
-        #   {
-        #     # packages.default = pkgs.panda-prosthesis;
-        #   };
+        perSystem =
+          { pkgs, ... }:
+          {
+            # packages.default = pkgs.panda-prosthesis;
+            devShells = {
+              mc-rtc-superbuild-module = pkgs.make-shell {
+                # imports = [ ./modules/superbuild.nix ];
+                imports = [ inputs.mc-rtc-nix.flakeModules.superbuild ];
+                mc-rtc-superbuild = {
+                  enable = true;
+                  pname = "panda-prosthesis-superbuild";
+                  traceRuntimeDependencies = true;
+
+                  # Pass a function that takes pkgs!
+                  robots = [
+                    pkgs.mc-panda-lirmm
+                    pkgs.mc-panda
+                  ];
+
+                  apps = [
+                    pkgs.mc-franka
+                    pkgs.mc-rtc-magnum
+                  ];
+
+                  config = "lib/mc_controller/etc/panda_prosthesis/mc_rtc.yaml";
+
+                  devel = {
+                    controllers = [ pkgs.panda-prosthesis ];
+                    plugins = [ pkgs.panda-prosthesis ];
+                    robots = [ pkgs.panda-prosthesis ];
+                    config = "lib64/mc_controller/etc/panda_prosthesis/mc_rtc.yaml";
+                  };
+                };
+
+              };
+
+            };
+          };
       }
     );
 }
