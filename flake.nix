@@ -41,7 +41,7 @@
               {
                 enable = true;
                 pname = "panda-prosthesis-superbuild";
-                traceRuntimeDependencies = true;
+                traceRuntimeDependencies = false;
 
                 # Pass a function that takes pkgs!
                 robots = [
