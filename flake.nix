@@ -2,8 +2,7 @@
   description = "PandaProsthesis controller for the Rolkneematics project";
 
   inputs = {
-    # mc-rtc-nix.url = "github:mc-rtc/nixpkgs";
-    mc-rtc-nix.url = "github:mc-rtc/nixpkgs/pull/44/head"; # local devshell update
+    mc-rtc-nix.url = "github:mc-rtc/nixpkgs";
     # mc-rtc-nix.url = "path:/home/arnaud/devel/mc-rtc-nix/nixpkgs";
     flake-parts.follows = "mc-rtc-nix/flake-parts";
     systems.follows = "mc-rtc-nix/systems";
@@ -40,27 +39,39 @@
               { pkgs, ... }:
               {
                 enable = true;
-                pname = "panda-prosthesis-superbuild";
-                traceRuntimeDependencies = false;
+                project.pname = "";
+                configurations = {
+                  panda-prosthesis-minimal = {
+                    extends = [ "minimal" ];
+                    runtime = {
+                      robots = [
+                        pkgs.mc-panda-lirmm
+                        pkgs.mc-panda
+                      ];
 
-                # Pass a function that takes pkgs!
-                robots = [
-                  pkgs.mc-panda-lirmm
-                  pkgs.mc-panda
-                ];
-
-                apps = [
-                  pkgs.mc-franka
-                  pkgs.mc-rtc-magnum
-                ];
-
-                config = "lib/mc_controller/etc/panda_prosthesis/mc_rtc.yaml";
-
-                devel = {
-                  controllers = [ pkgs.panda-prosthesis ];
-                  plugins = [ pkgs.panda-prosthesis ];
-                  robots = [ pkgs.panda-prosthesis ];
-                  config = "lib64/mc_controller/etc/panda_prosthesis/mc_rtc.yaml";
+                      apps = [
+                        pkgs.mc-rtc-magnum
+                      ];
+                      config = "lib/mc_controller/etc/panda_prosthesis/mc_rtc.yaml";
+                    };
+                    devel = {
+                      config = "lib64/mc_controller/etc/panda_prosthesis/mc_rtc.yaml";
+                      controllers = [ pkgs.panda-prosthesis ];
+                      plugins = [ pkgs.panda-prosthesis ];
+                      robots = [ pkgs.panda-prosthesis ];
+                    };
+                  };
+                  panda-prosthesis-full = {
+                    extends = [
+                      "default"
+                      "panda-prosthesis-minimal"
+                    ];
+                    runtime = {
+                      apps = [
+                        pkgs.mc-franka
+                      ];
+                    };
+                  };
                 };
               };
 

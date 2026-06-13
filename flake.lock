@@ -1,5 +1,20 @@
 {
   "nodes": {
+    "ccache-trigger": {
+      "locked": {
+        "lastModified": 1657739266,
+        "narHash": "sha256-vLy8GQr0noEcoA+jX24FgUVBA/poV36zDWAUChN3hIY=",
+        "owner": "boolean-option",
+        "repo": "false",
+        "rev": "d06b4794a134686c70a1325df88a6e6768c6b212",
+        "type": "github"
+      },
+      "original": {
+        "owner": "boolean-option",
+        "repo": "false",
+        "type": "github"
+      }
+    },
     "flake-compat": {
       "flake": false,
       "locked": {
@@ -759,6 +774,7 @@
     },
     "mc-rtc-nix_2": {
       "inputs": {
+        "ccache-trigger": "ccache-trigger",
         "flake-parts": [
           "mc-rtc-nix",
           "gepetto",
@@ -777,6 +793,7 @@
           "gepetto",
           "nixpkgs"
         ],
+        "private-trigger": "private-trigger",
         "systems": [
           "mc-rtc-nix",
           "gepetto",
@@ -784,16 +801,15 @@
         ]
       },
       "locked": {
-        "lastModified": 1781252480,
-        "narHash": "sha256-sIe7grJz3ZLJNwLDit5b60qvSdwxjyLDp+3SNMftYMg=",
+        "lastModified": 1781357694,
+        "narHash": "sha256-gbsTtXtw9jG3QBypwL7ALeKWD6KUdKE73+mHrzjqRAw=",
         "owner": "mc-rtc",
         "repo": "nixpkgs",
-        "rev": "4d7f0493fae82c1d60ab7757b21b4c2e6b39f5f9",
+        "rev": "0fbcf52bbe699bf0bed95a0cbba0b16182ef8244",
         "type": "github"
       },
       "original": {
         "owner": "mc-rtc",
-        "ref": "pull/44/head",
         "repo": "nixpkgs",
         "type": "github"
       }
@@ -1070,6 +1086,21 @@
       "original": {
         "owner": "cachix",
         "repo": "pre-commit-hooks.nix",
+        "type": "github"
+      }
+    },
+    "private-trigger": {
+      "locked": {
+        "lastModified": 1657739266,
+        "narHash": "sha256-vLy8GQr0noEcoA+jX24FgUVBA/poV36zDWAUChN3hIY=",
+        "owner": "boolean-option",
+        "repo": "false",
+        "rev": "d06b4794a134686c70a1325df88a6e6768c6b212",
+        "type": "github"
+      },
+      "original": {
+        "owner": "boolean-option",
+        "repo": "false",
         "type": "github"
       }
     },
