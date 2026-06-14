@@ -4,7 +4,6 @@
 #include <mc_rtc/gui/Checkbox.h>
 #include <mc_tasks/TransformTask.h>
 #include <RBDyn/MultiBodyConfig.h>
-#include <boost/filesystem.hpp>
 #include <Eigen/src/Core/Matrix.h>
 #include <filesystem>
 #include <utils.h>
@@ -31,7 +30,7 @@ void Initial::load(mc_control::fsm::Controller & ctl)
   auto initial_posture = mbcToActuated(robot.mbc().q);
   std::vector<std::vector<double>> initial_joints;
 
-  if(boost::filesystem::exists(etc_file_))
+  if(fs::exists(etc_file_))
   {
     mc_rtc::Configuration initial(etc_file_);
     if(initial.has(robotName_) && initial(robotName_).has("pose"))

@@ -8,10 +8,11 @@
 #include <mc_trajectory/LinearInterpolation.h>
 #include <boost/filesystem.hpp>
 #include <3rd-party/csv.h>
+#include <filesystem>
 #include <iomanip>
 #include <utils.h>
 
-namespace fs = boost::filesystem;
+namespace fs = std::filesystem;
 
 /**
  * \brief   Return the filenames of all files that have the specified extension
@@ -238,9 +239,8 @@ void ManipulateKnee::saveResultsThread()
 {
   auto makeResultPath = [](const std::string & resultPath, size_t resultSize)
   {
-    boost::filesystem::path origPath(resultPath);
-    boost::filesystem::path newPath =
-        origPath.parent_path() / (origPath.stem().string() + "_" + std::to_string(resultSize) + ".csv");
+    fs::path origPath(resultPath);
+    fs::path newPath = origPath.parent_path() / (origPath.stem().string() + "_" + std::to_string(resultSize) + ".csv");
     return newPath.string();
   };
   std::unique_lock<std::mutex> lock(saveResultsMutex_);
