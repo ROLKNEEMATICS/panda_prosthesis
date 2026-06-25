@@ -11,6 +11,9 @@
     mc-panda.url = "github:jrl-umi3218/mc_panda/pull/17/head";
     mc-panda-lirmm.url = "github:jrl-umi3218/mc_panda_lirmm/pull/16/head";
     mc-panda-lirmm.flake = false;
+
+    # FIXME: for USE_REALTIME=false
+    mc-franka.url = "github:jrl-umi3218/mc_franka/pull/16/head";
   };
 
   nixConfig = {
@@ -76,6 +79,9 @@
               };
 
             flakoboros = {
+              overlays = [
+                inputs.mc-franka.overlays.flakoboros
+              ];
               overrideAttrs.mc-panda = {
                 src = inputs.mc-panda;
               };
