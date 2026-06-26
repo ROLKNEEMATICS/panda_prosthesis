@@ -1815,15 +1815,16 @@
         "with-ros-trigger": "with-ros-trigger_2"
       },
       "locked": {
-        "lastModified": 1782210979,
-        "narHash": "sha256-3TSYQ9sq0Q/REjuJjI5EgI+yGYsQxThjo9DgI32tFSY=",
+        "lastModified": 1782421452,
+        "narHash": "sha256-QSAnu8PeJe+hF1negVY5qoC8YjBdHmnlEGhjLBhWMlM=",
         "owner": "mc-rtc",
         "repo": "nixpkgs",
-        "rev": "c2625a35552acb7f59f062ca82db3ef84b3cb1da",
+        "rev": "23fb64b16e5905f5d37da94c299ef7301470b938",
         "type": "github"
       },
       "original": {
         "owner": "mc-rtc",
+        "ref": "pull/65/head",
         "repo": "nixpkgs",
         "type": "github"
       }

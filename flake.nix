@@ -2,7 +2,8 @@
   description = "PandaProsthesis controller for the Rolkneematics project";
 
   inputs = {
-    mc-rtc-nix.url = "github:mc-rtc/nixpkgs";
+    # mc-rtc-nix.url = "github:mc-rtc/nixpkgs";
+    mc-rtc-nix.url = "github:mc-rtc/nixpkgs/pull/65/head";
     # mc-rtc-nix.url = "path:/home/arnaud/devel/mc-rtc-nix/nixpkgs";
     flake-parts.follows = "mc-rtc-nix/flake-parts";
     systems.follows = "mc-rtc-nix/systems";
@@ -38,6 +39,7 @@
         imports = [
           inputs.mc-rtc-nix.flakeModule
           {
+            # mc-rtc-nix.with-ros = false;
             mc-rtc-superbuild =
               { pkgs, ... }:
               {
