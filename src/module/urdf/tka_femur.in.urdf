@@ -1,0 +1,39 @@
+<robot name="tka_femur">
+  <link name="femur_base_link" />
+  <link name="support_femur" />
+  <link name="knee_center" />
+  <link name="femur">
+    <inertial>
+      <origin xyz="-0.00022131995570027409 0.000733374514434213 0.13602920766649584" rpy="0 0 0"/>
+      <mass value="4.495975323033938"/>
+      <inertia ixx="0.019837" ixy="-0.000111" ixz="2.1e-05" iyy="0.01989" iyz="-0.000147" izz="0.00322"/>
+    </inertial>
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry>
+        <mesh filename="file://@MODULE_INSTALL_LOCATION@/meshes/tka_femur/base_link.stl" scale="0.001 0.001 0.001"/>
+      </geometry>
+    </visual>
+    <collision>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry>
+        <mesh filename="file://@MODULE_INSTALL_LOCATION@/meshes/tka_femur/base_link.stl" scale="0.001 0.001 0.001"/>
+      </geometry>
+    </collision>
+  </link>
+  <joint name="prosthesis_to_knee_center" type="fixed">
+    <parent link="femur"/>
+    <child link="knee_center"/>
+    <origin xyz="0.0 0.0 0.226" rpy="0 0 0.5"/>
+  </joint>
+  <joint name="ee_to_support" type="fixed">
+    <parent link="femur_base_link"/>
+    <child link="support_femur"/>
+    <origin xyz="0 0 0" rpy="0 0 2.75"/>
+  </joint>
+  <joint name="support_to_prosthesis" type="fixed">
+    <parent link="support_femur"/>
+    <child link="femur"/>
+    <origin xyz="0 0 0" rpy="0 0 0"/>
+  </joint>
+</robot>

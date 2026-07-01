@@ -31,32 +31,40 @@ void ProtoTMRPlugin::init(mc_control::MCGlobalController & gc, const mc_rtc::Con
 
   serial_port_name = config_("serial_port_name", std::string{"/dev/ttyUSB0"});
   serial_port_baud_rate = config_("serial_port_baud_rate", 9600);
-  // This will always create the serial_ instance, regardless of whether the sensor is connected
-  // The difference is that the internal thread will not run, and the Serial class will return connected() = false
-  serial_.reset(new io::ProtoTMRSerial(serial_port_name, serial_port_baud_rate));
-
   config_("verbose", verbose_);
   config_("sensorRequired", sensorRequired_);
+  try
+  {
+    serial_.reset(new io::ProtoTMRSerial(serial_port_name, serial_port_baud_rate));
+  }
+  catch(const std::exception & e)
+  {
+    if(sensorRequired_)
+    {
+      throw;
+    }
+    mc_rtc::log::warning("[ProtoTMRPlugin] Could not open serial sensor (sensorRequired=false): {}", e.what());
+  }
   mc_rtc::log::info("[ProtoTMRPlugin] Initialized with config:\n{}", config_.dump(true, true));
 
   gc.controller().datastore().make<bool>("ProtoTMRPlugin", true);
   gc.controller().datastore().make_call("ProtoTMRPlugin::Connected",
-                                        [this]() { return !sensorRequired_ || serial_->connected(); });
+                                        [this]() { return !sensorRequired_ || (serial_ && serial_->connected()); });
   gc.controller().datastore().make_call("ProtoTMRPlugin::RequestNewFrame",
                                         [this]()
                                         {
-                                          if(sensorRequired_ && !serial_->connected())
+                                          if(sensorRequired_ && (!serial_ || !serial_->connected()))
                                           {
                                             mc_rtc::log::error_and_throw(
                                                 "[ProtoTMRPlugin::RequestNewFrame] Requesting new frame, but no serial "
                                                 "connection is active and sensorRequired=true");
                                           }
-                                          if(serial_->connected()) serial_->requestNewFrame();
+                                          if(serial_ && serial_->connected()) serial_->requestNewFrame();
                                         });
   gc.controller().datastore().make_call("ProtoTMRPlugin::GotNewFrame",
                                         [this]()
                                         {
-                                          if(sensorRequired_ && !serial_)
+                                          if(sensorRequired_ && (!serial_ || !serial_->connected()))
                                           {
                                             mc_rtc::log::error_and_throw(
                                                 "[ProtoTMRPlugin::GotNewFrame] Requesting new frame, but no serial "
@@ -70,12 +78,12 @@ void ProtoTMRPlugin::init(mc_control::MCGlobalController & gc, const mc_rtc::Con
       "ProtoTMRPlugin::GetLastFrame",
       [this]()
       {
-        if(sensorRequired_ && !serial_->connected())
+        if(sensorRequired_ && (!serial_ || !serial_->connected()))
         {
           mc_rtc::log::error_and_throw("[ProtoTMRPlugin::GetLastFrame] Requesting last frame, but no serial connection "
                                        "is active and sensorRequired=true");
         }
-        if(serial_->connected())
+        if(serial_ && serial_->connected())
           return serial_->getLastFrame();
         else
         {

@@ -1,0 +1,24 @@
+# Location of data files, all path in the YAML file are
+# interpreted relative to this path unless they are absolute paths
+path: "@MODULE_INSTALL_LOCATION@"
+name: bloc_support
+urdf_path: urdf/bloc_support.urdf
+rsdf_dir: rsdf/bloc_support
+fixed: true
+
+# convexHulls are auto-generated
+
+# Default orientation (quaternion) and position of the floating base
+default_attitude: [1., 0., 0., 0., 0., 0., 0.]
+
+frames:
+  - name: BlocSupportCenter
+    parent: bloc_support
+    X_p_f:
+      translation: [0.0075, 0.142618, 0.28075]
+      rotation: [0, 0, 0]
+  - name: centre_capteur
+    parent: bloc_support
+    X_p_f:
+      translation: [0.0075, -0.142618, 0.25575]
+      rotation: [0, 0, 0]

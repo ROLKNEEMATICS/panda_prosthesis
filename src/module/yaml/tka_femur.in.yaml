@@ -1,0 +1,24 @@
+# Location of data files, all path in the YAML file are
+# interpreted relative to this path unless they are absolute paths
+path: "@MODULE_INSTALL_LOCATION@"
+name: tka_femur
+urdf_path: urdf/tka_femur.urdf
+rsdf_dir: rsdf/tka_femur
+fixed: true
+
+# convexHulls are not generated yet for the TKA CAD exports
+
+# Default orientation (quaternion) and position of the floating base
+default_attitude: [1., 0., 0., 0., 0., 0., 0.]
+
+frames:
+  - name: FemurCalibration
+    parent: femur
+    X_p_f:
+      translation: [0, 0, 0]
+      rotation: [0, 0, 0]
+  - name: Femur
+    parent: femur
+    X_p_f:
+      translation: [0.001531, 0.000281, 0.24603]
+      rotation: [0, 0, 0]

@@ -12,16 +12,19 @@ PandaProsthetics::PandaProsthetics(mc_rbdyn::RobotModulePtr rm, double dt, const
   realRobots().reserve(100);
   outputRobots().reserve(100);
 
-  auto robotConfig = config("robots")(robot().name());
-  if(robotConfig.has("CollisionBehavior"))
+  if(config.has("robots") && config("robots").has(robot().name()))
   {
-    auto colC = robotConfig("CollisionBehavior");
-    mc_rtc::log::warning("[{}] Changing robot CollisionBeaviour to:\n{}", this->name_, colC.dump(true, true));
-    auto & robot_device = robot().device<mc_panda::Robot>("Robot");
-    robot_device.setCollisionBehavior(colC("lower_torque_thresholds").operator std::array<double, 7>(),
-                                      colC("upper_torque_thresholds").operator std::array<double, 7>(),
-                                      colC("lower_force_thresholds").operator std::array<double, 6>(),
-                                      colC("upper_force_thresholds").operator std::array<double, 6>());
+    auto robotConfig = config("robots")(robot().name());
+    if(robotConfig.has("CollisionBehavior"))
+    {
+      auto colC = robotConfig("CollisionBehavior");
+      mc_rtc::log::warning("[{}] Changing robot CollisionBeaviour to:\n{}", this->name_, colC.dump(true, true));
+      auto & robot_device = robot().device<mc_panda::Robot>("Robot");
+      robot_device.setCollisionBehavior(colC("lower_torque_thresholds").operator std::array<double, 7>(),
+                                        colC("upper_torque_thresholds").operator std::array<double, 7>(),
+                                        colC("lower_force_thresholds").operator std::array<double, 6>(),
+                                        colC("upper_force_thresholds").operator std::array<double, 6>());
+    }
   }
 
   gui()->addElement(

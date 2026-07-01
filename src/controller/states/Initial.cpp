@@ -33,7 +33,7 @@ void Initial::load(mc_control::fsm::Controller & ctl)
   if(fs::exists(etc_file_))
   {
     mc_rtc::Configuration initial(etc_file_);
-    if(initial.has(robotName_) && initial(robotName_).has("pose"))
+    if(loadPose_ && initial.has(robotName_) && initial(robotName_).has("pose"))
     {
       initial_pose_ = initial(robotName_)("pose");
       robot.posW(initial_pose_);
@@ -96,6 +96,7 @@ void Initial::start(mc_control::fsm::Controller & ctl)
   auto & robot = ctl.robot(robotName_);
   initial_pose_ = robot.posW();
   config_("load", load_);
+  config_("loadPose", loadPose_);
   config_("frame", frame_);
   config_("reset_mbc", reset_mbc_);
   config_("category", category_);
@@ -103,6 +104,12 @@ void Initial::start(mc_control::fsm::Controller & ctl)
   transformTask_ = std::make_shared<mc_tasks::TransformTask>(robot.frame(frame_), config_("transformTaskStiffness", 60),
                                                              config_("transformTaskWeight", 500));
   transformTask_->reset();
+  useDefaultPose_ = config_.has("default_pose");
+  if(useDefaultPose_)
+  {
+    default_pose_ = static_cast<sva::PTransformd>(config_("default_pose"));
+    transformTask_->target(default_pose_);
+  }
 
   useJoints_ = ctl.getPostureTask(robotName_) != nullptr;
 
@@ -133,9 +140,20 @@ void Initial::start(mc_control::fsm::Controller & ctl)
   if(load_)
   { // Load this robot initial stance from saved configuration
     load(ctl);
+    if(useDefaultPose_)
+    {
+      transformTask_->target(default_pose_);
+      transformTaskActive_ = true;
+      ctl.solver().addTask(transformTask_);
+    }
   }
   else
   { // Allow to manually define it
+    if(useDefaultPose_)
+    {
+      transformTaskActive_ = true;
+      ctl.solver().addTask(transformTask_);
+    }
     if(config_("showInstructions", false))
     {
       ctl.gui()->addElement(
@@ -201,6 +219,10 @@ bool Initial::run(mc_control::fsm::Controller & ctl)
       // the posture task otherwise
       ctl.getPostureTask(robotName_)->reset();
     }
+    if(transformTaskActive_)
+    {
+      return transformTask_->speed().norm() < 1e-4 && transformTask_->eval().norm() < 1e-3;
+    }
     return true;
   }
   if(load_)
@@ -210,7 +232,9 @@ bool Initial::run(mc_control::fsm::Controller & ctl)
       if(useJoints_)
       {
         auto & pt = *ctl.getPostureTask(robotName_);
-        return pt.speed().norm() < 1e-4 && pt.eval().norm() < 1e-3;
+        bool postureDone = pt.speed().norm() < 1e-4 && pt.eval().norm() < 1e-3;
+        bool transformDone = !useDefaultPose_ || (transformTask_->speed().norm() < 1e-4 && transformTask_->eval().norm() < 1e-3);
+        return postureDone && transformDone;
       }
       else
       {
@@ -226,6 +250,10 @@ bool Initial::run(mc_control::fsm::Controller & ctl)
         posture[robot.jointIndexInMBC(i)][0] = actuated_posture[i];
       }
       ctl.getPostureTask(robotName_)->posture(posture);
+      if(useDefaultPose_)
+      {
+        transformTask_->target(default_pose_);
+      }
       t_ += ctl.timeStep;
       return false;
     }

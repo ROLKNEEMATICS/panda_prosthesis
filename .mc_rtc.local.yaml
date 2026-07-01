@@ -35,8 +35,7 @@ Franka:
   # Actuated robots that are not controlled via mc_franka
   ignored: [env/door, env/box]
 
-
-ControllerModulePaths: ["@MC_CONTROLLER_RUNTIME_INSTALL_PREFIX@"]
-RobotModulePaths: ["@MC_ROBOTS_RUNTIME_INSTALL_PREFIX@"]
-ObserverModulePaths: ["@MC_OBSERVERS_RUNTIME_INSTALL_PREFIX@"]
-GlobalPluginPaths: ["@MC_PLUGINS_RUNTIME_INSTALL_PREFIX@"]
+ControllerModulePaths: ["/home/nixos/workspace/install/lib64/mc_controller"]
+RobotModulePaths: ["/home/nixos/workspace/install/lib64/mc_robots", "/nix/store/3p0p4zjxafy7svlpj9cfxjl7v0vj645k-mc-panda-lirmm-1.0.0/lib64/mc_robots", "/nix/store/3p0p4zjxafy7svlpj9cfxjl7v0vj645k-mc-panda-lirmm-1.0.0/lib/mc_robots", "/nix/store/kfflhqbhxpvynsn2kw6wlfp5j4hpj5m6-mc-panda-1.0.0/lib64/mc_robots", "/nix/store/kfflhqbhxpvynsn2kw6wlfp5j4hpj5m6-mc-panda-1.0.0/lib/mc_robots"]
+ObserverModulePaths: ["/home/nixos/workspace/install/lib64/mc_observers", "/nix/store/mi2203954la10a6v1ys4njq9bijc2pw7-mc-state-observation-1.1.0/lib64/mc_observers", "/nix/store/mi2203954la10a6v1ys4njq9bijc2pw7-mc-state-observation-1.1.0/lib/mc_observers"]
+GlobalPluginPaths: ["/home/nixos/workspace/install/lib64/mc_plugins"]

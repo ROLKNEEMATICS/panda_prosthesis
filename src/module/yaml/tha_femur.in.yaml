@@ -1,0 +1,22 @@
+# Location of data files, all path in the YAML file are
+# interpreted relative to this path unless they are absolute paths
+path: "@MODULE_INSTALL_LOCATION@"
+name: tha_femur
+urdf_path: urdf/tha_femur.urdf
+fixed: true
+
+frames:
+  - name: TibiaCalibration
+    parent: base_link
+    X_p_f:
+      translation: [0, 0, 0.282] # FIXME
+      rotation: [0, 0, 0.3] # FIXME
+  # Frame above the surface of the Femur
+  # This should contain the desired offset distance between the femur and the joint center
+  - name: Tibia
+    parent: base_link
+    # plastic support 0.215
+    # metal prosthesis 0.1
+    X_p_f:
+      translation: [0, 0, 0.282] # FIXME
+      rotation: [0, 0, 0.3] # FIXME
