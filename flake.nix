@@ -2,33 +2,10 @@
   description = "PandaProsthesis controller for the Rolkneematics project";
 
   inputs = {
-    # mc-rtc-nix.url = "github:mc-rtc/nixpkgs";
-    mc-rtc-nix.url = "github:mc-rtc/nixpkgs/pull/65/head";
-    # mc-rtc-nix.url = "path:/home/arnaud/devel/mc-rtc-nix/nixpkgs";
+    mc-rtc-nix.url = "github:mc-rtc/nixpkgs";
     flake-parts.follows = "mc-rtc-nix/flake-parts";
     systems.follows = "mc-rtc-nix/systems";
     gepetto.follows = "mc-rtc-nix/gepetto";
-
-    mc-panda.url = "github:jrl-umi3218/mc_panda/pull/17/head";
-    mc-panda-lirmm.url = "github:jrl-umi3218/mc_panda_lirmm/pull/16/head";
-    mc-panda-lirmm.flake = false;
-
-    # FIXME: for USE_REALTIME=false
-    # mc-franka.url = "github:jrl-umi3218/mc_franka/pull/16/head";
-    mc-franka.url = "github:arntanguy/mc_franka/563e4fbf3383977568f0246360ec78fc8bdf2c77";
-  };
-
-  nixConfig = {
-    extra-substituters = [
-      "https://mc-rtc-nix.cachix.org"
-      "https://gepetto.cachix.org"
-      "https://attic.iid.ciirc.cvut.cz/ros"
-    ];
-    extra-trusted-public-keys = [
-      "mc-rtc-nix.cachix.org-1:5M3sLvHXJCep4wc1tQl7QuFWL2eH2I0jkuvWtqJDYQs="
-      "gepetto.cachix.org-1:toswMl31VewC0jGkN6+gOelO2Yom0SOHzPwJMY2XiDY="
-      "ros:JR95vUYsShSqfA1VTYoFt1Nz6uXasm5QrcOsGry9f6Q="
-    ];
   };
 
   outputs =
@@ -82,19 +59,6 @@
               };
 
             flakoboros = {
-              overlays = [
-                inputs.mc-franka.overlays.flakoboros
-              ];
-              overrideAttrs.mc-franka = {
-                src = inputs.mc-franka;
-              };
-              overrideAttrs.mc-panda = {
-                src = inputs.mc-panda;
-              };
-              overrideAttrs.mc-panda-lirmm = {
-                src = inputs.mc-panda-lirmm;
-              };
-
               overrideAttrs.panda-prosthesis =
                 { drv-prev, pkgs-final, ... }:
                 {
