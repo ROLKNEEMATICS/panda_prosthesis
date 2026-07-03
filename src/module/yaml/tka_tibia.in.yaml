@@ -13,12 +13,12 @@ default_attitude: [1., 0., 0., 0., 0., 0., 0.]
 
 frames:
   - name: TibiaCalibration
-    parent: tibia
+    parent: knee_center
     X_p_f:
       translation: [0, 0, 0]
       rotation: [0, 0, 0]
   - name: Tibia
-    parent: tibia
+    parent: knee_center
     X_p_f:
-      translation: [0.003907, 0.08497, 0.201111]
-      rotation: [-1.5707963267948966, 0, 3.141592653589793]
+      translation: [0, 0, 0]
+      rotation: [0, 0, 0]

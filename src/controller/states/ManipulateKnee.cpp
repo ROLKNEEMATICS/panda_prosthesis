@@ -670,6 +670,7 @@ void ManipulateKnee::start(mc_control::fsm::Controller & ctl)
   updateTibiaOffset(tibiaOffsetInitial_);
   updateFemurOffset(femurOffsetInitial_);
 
+  resetToZero();
   output("OK");
   run(ctl);
 }

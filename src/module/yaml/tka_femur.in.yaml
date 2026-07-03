@@ -13,12 +13,12 @@ default_attitude: [1., 0., 0., 0., 0., 0., 0.]
 
 frames:
   - name: FemurCalibration
-    parent: femur
+    parent: knee_center
     X_p_f:
       translation: [0, 0, 0]
       rotation: [0, 0, 0]
   - name: Femur
-    parent: femur
+    parent: knee_center
     X_p_f:
-      translation: [0.001531, 0.000281, 0.24603]
+      translation: [0, 0, 0]
       rotation: [0, 0, 0]
