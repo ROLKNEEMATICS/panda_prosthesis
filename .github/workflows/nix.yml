@@ -19,7 +19,6 @@ jobs:
       - uses: actions/checkout@v6
       - uses: cachix/install-nix-action@v31
       - uses: cachix/cachix-action@v17
-        if: github.repository == 'ROLKNEEMATICS/panda_prosthesis' && github.ref == 'refs/heads/main'
         with:
           name: mc-rtc-nix
           authToken: '${{ secrets.CACHIX_AUTH_TOKEN }}'
