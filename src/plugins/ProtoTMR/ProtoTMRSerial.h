@@ -9,6 +9,9 @@ namespace io
 {
 struct ProtoTMRSerial : public Serial
 {
+  constexpr static size_t SENSOR_COUNT = 23;
+  constexpr static size_t MEASUREMENTS_PER_SENSOR = 1;
+
   ProtoTMRSerial(const std::string & portName, const int baudRate);
   ~ProtoTMRSerial();
 

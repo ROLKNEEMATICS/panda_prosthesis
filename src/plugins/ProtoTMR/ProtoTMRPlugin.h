@@ -37,6 +37,8 @@ protected:
   void connectAndStartReading();
 
 protected:
+  mc_rtc::Configuration config_;
+  bool sensorRequired_ = true;
   int serial_port_baud_rate = 9600;
   std::string serial_port_name;
 

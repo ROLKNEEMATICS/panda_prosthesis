@@ -1,12 +1,11 @@
 #include "panda_brace_module.h"
 #include <RBDyn/CoM.h>
 #include <RBDyn/parsers/urdf.h>
-#include <boost/filesystem.hpp>
 #include "config.h"
 #include "config_panda_brace.h"
 #include <sch/S_Object/S_Box.h>
 
-namespace bfs = boost::filesystem;
+namespace fs = std::filesystem;
 
 namespace mc_robots
 {
@@ -60,8 +59,8 @@ PandaBraceCommonRobotModule<DebugLog>::PandaBraceCommonRobotModule(const std::st
         {
           log_info("[PandaBrace] Add body {}", name);
           mbg.addBody(bodies[bodyIdx]);
-          auto convex = bfs::path(robot_description_path_) / "convex" / (name + "-ch.txt");
-          if(!bfs::exists(convex))
+          auto convex = fs::path(robot_description_path_) / "convex" / (name + "-ch.txt");
+          if(!fs::exists(convex))
           {
             mc_rtc::log::error_and_throw<std::runtime_error>("Invalid brace_top_setup, no convex found {}",
                                                              convex.string());
@@ -140,9 +139,9 @@ PandaBraceCommonRobotModule<DebugLog>::PandaBraceCommonRobotModule(const std::st
   };
 
   auto prosthesis = std::string{"panda_brace_femur"};
-  auto transforms = bfs::path(panda_prosthesis::transforms_DIR);
+  auto transforms = fs::path(panda_prosthesis::transforms_DIR);
   auto transform = transforms / (prosthesis + ".yml");
-  if(!bfs::exists(transform))
+  if(!fs::exists(transform))
   {
     mc_rtc::log::error_and_throw<std::runtime_error>("Invalid prosthesis {}, no transform found {}", prosthesis,
                                                      transform.string());
@@ -204,7 +203,7 @@ PandaBraceCommonRobotModule<DebugLog>::PandaBraceCommonRobotModule(const std::st
   // XXX autocompute inertia instead
   auto mechanical_data_conf = generate_panda_mechanical_data(transformC("inertia_" + brace_urdf_name));
   auto mechanical_data_path =
-      bfs::path(fmt::format("{}/mechanical_data_{}.json", bfs::temp_directory_path().string(), brace_urdf_name));
+      fs::path(fmt::format("{}/mechanical_data_{}.json", fs::temp_directory_path().string(), brace_urdf_name));
   mechanical_data_conf.save(mechanical_data_path.string());
   log_info("Saved mechanical data file for the brace attachement to {}", mechanical_data_path.string());
   log_info("Mechanical data is:\n {}", mechanical_data_conf.dump(true));
@@ -226,7 +225,7 @@ PandaBraceCommonRobotModule<DebugLog>::PandaBraceCommonRobotModule(const std::st
     // - translation from the parent body to the virtual link CoM (3)
     // - wrench offset (6).)
     log_success("Writing calibration data for BraceTopForceSensor");
-    bfs::path out = bfs::path(panda_prosthesis::calib_DIR);
+    fs::path out = fs::path(panda_prosthesis::calib_DIR);
     out += "/calib_data.BraceTopForceSensor";
     std::ofstream ofs(out.string());
     if(!ofs.good())
@@ -277,7 +276,7 @@ PandaBraceCommonRobotModule<DebugLog>::PandaBraceCommonRobotModule(const std::st
   _minimalSelfCollisions.emplace_back("Link2", "BASE_STAND", 0.08, 0.03, d);
 
   // Save new URDF
-  auto urdf_path = bfs::temp_directory_path() / ("panda_brace_femur.urdf");
+  auto urdf_path = fs::temp_directory_path() / ("panda_brace_femur.urdf");
   {
     rbd::parsers::Limits limits;
     limits.lower = _bounds[0];

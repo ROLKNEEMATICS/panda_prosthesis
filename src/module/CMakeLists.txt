@@ -25,6 +25,11 @@ add_yaml_module(taa_talar)
 add_yaml_module(taa_tibia)
 add_yaml_module(tsa_glenoid)
 add_yaml_module(tsa_humerus)
+add_yaml_module(tka_femur)
+add_yaml_module(tka_tibia)
+add_yaml_module(tha_femur)
+add_yaml_module(tha_acetabular)
+add_yaml_module(bloc_support)
 
 
 

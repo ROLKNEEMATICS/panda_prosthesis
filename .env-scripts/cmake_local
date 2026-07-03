@@ -1,3 +1,0 @@
-#!/usr/bin/env bash
-
-cmake -G Ninja -DCMAKE_INSTALL_PREFIX=$PWD/../../../install -DMC_RTC_HONOR_INSTALL_PREFIX=ON -DCMAKE_EXPORT_COMPILE_COMMANDS=ON $@

@@ -35,7 +35,7 @@ install(DIRECTORY etc/bonetag_panda DESTINATION ${CALIB_DIR_INIT} FILES_MATCHING
 configure_file(etc/PandaProsthesis.in.yaml "${CMAKE_CURRENT_BINARY_DIR}/etc/PandaProsthesis.yaml")
 install(FILES "${CMAKE_CURRENT_BINARY_DIR}/etc/PandaProsthesis.yaml" DESTINATION "${MC_CONTROLLER_RUNTIME_INSTALL_PREFIX}/etc")
 configure_file(etc/mc_rtc.in.yaml "${CMAKE_CURRENT_BINARY_DIR}/etc/mc_rtc.yaml")
-install(FILES "${CMAKE_CURRENT_BINARY_DIR}/etc/mc_rtc.yaml" DESTINATION "${MC_CONTROLLER_RUNTIME_INSTALL_PREFIX}/etc")
+install(FILES "${CMAKE_CURRENT_BINARY_DIR}/etc/mc_rtc.yaml" DESTINATION "${MC_CONTROLLER_RUNTIME_INSTALL_PREFIX}/etc/${PROJECT_NAME}/")
 
 
 # PandaBrace controller (Lea's orthesis)

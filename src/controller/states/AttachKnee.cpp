@@ -17,9 +17,13 @@ void AttachKnee::start(mc_control::fsm::Controller & ctl)
                           * ctl.robot("panda_tibia").frame("Tibia").position());
     }
   }
-  for(const auto & col : config_("collisions"))
+  if(config_.has("collisions"))
   {
-    ctl.addCollisions(col("r1"), col("r2"), col("collisions"), true);
+    for(const auto & col : config_("collisions"))
+    {
+      // ctl.addCollisions(col("r1"), col("r2"), col("collisions"), true);
+      ctl.addCollisions(col("r1"), col("r2"), col("collisions"));
+    }
   }
 }
 

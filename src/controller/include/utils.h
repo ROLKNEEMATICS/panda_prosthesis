@@ -1,6 +1,6 @@
 #pragma once
-#include <boost/filesystem.hpp>
 #include <cmath>
+#include <filesystem>
 #include <string>
 
 // Use environment variable or fallback to $HOME/.local/share/<project>/results
@@ -24,7 +24,7 @@ inline std::string get_or_create_dir(std::string_view name)
       dir = "/tmp/mc-rtc/controllers/panda_prosthesis/" + std::string{name};
     }
   }
-  boost::filesystem::create_directories(dir);
+  std::filesystem::create_directories(dir);
   return dir;
 }
 
@@ -32,15 +32,15 @@ inline std::string get_or_create_dir(std::string_view name)
  * \brief   Return the filenames of all files that have the specified extension
  *          in the specified directory and all subdirectories.
  */
-inline std::vector<std::string> get_all_filenames(boost::filesystem::path const & root, std::string const & ext = "")
+inline std::vector<std::string> get_all_filenames(std::filesystem::path const & root, std::string const & ext = "")
 {
   std::vector<std::string> paths;
 
-  if(boost::filesystem::exists(root) && boost::filesystem::is_directory(root))
+  if(std::filesystem::exists(root) && std::filesystem::is_directory(root))
   {
-    for(auto const & entry : boost::filesystem::recursive_directory_iterator(root))
+    for(auto const & entry : std::filesystem::recursive_directory_iterator(root))
     {
-      if(boost::filesystem::is_regular_file(entry) && (ext.empty() || entry.path().extension() == ext))
+      if(std::filesystem::is_regular_file(entry) && (ext.empty() || entry.path().extension() == ext))
         paths.emplace_back(entry.path().filename().c_str());
     }
   }

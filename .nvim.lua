@@ -5,7 +5,7 @@ vim.lsp.config('yamlls',
   settings = {
     yaml = {
       schemas = {
-        ["https://jrl.cnrs.fr/mc_rtc/schemas/mc_rtc/mc_rtc.json"] = {"**/mc_rtc.yaml", "**/mc_rtc.in.yaml"},
+        ["https://jrl.cnrs.fr/mc_rtc/schemas/mc_rtc/mc_rtc.json"] = {"mc_rtc_**.yaml", "**/mc_rtc.yaml", "**/mc_rtc.in.yaml"},
         ["https://jrl.cnrs.fr/mc_rtc/schemas/mc_control/FSMController.json"] = {"**/PandaProsthesis.in.yaml", "**/PandaBrace.in.yaml"},
         ["https://jrl.cnrs.fr/mc_rtc/schemas/mc_control/FSMStates.json"] = "src/controller/states/data/*.yaml"
       },

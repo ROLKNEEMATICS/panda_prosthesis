@@ -23,6 +23,7 @@ private:
   PostureInterpolator postureInterp_;
   bool pose_changed_ = false;
   bool load_ = true;
+  bool loadPose_ = true;
   bool reset_mbc_ = false;
   bool useJoints_ = true;
   std::string frame_;
@@ -32,5 +33,7 @@ private:
   double t_ = 0;
 
   bool transformTaskActive_ = false;
+  bool useDefaultPose_ = false;
+  sva::PTransformd default_pose_ = sva::PTransformd::Identity();
   std::shared_ptr<mc_tasks::TransformTask> transformTask_ = nullptr;
 };

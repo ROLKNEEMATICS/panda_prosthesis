@@ -131,14 +131,14 @@ protected:
     next_ = true;
   }
 
-  void setRate(double rate, double timeStep)
+  inline double iterRateFromSeconds(double rate, double timeStep)
   {
-    iterRate_ = std::max(1u, static_cast<unsigned>(ceil(1 / (1 / rate * timeStep))));
+    return std::max(1u, static_cast<unsigned>(ceil(1 / (1 / rate * timeStep))));
   }
 
-  double getRate(double timeStep) const noexcept
+  inline double iterRateToSeconds(double iterRate, double timeStep) const noexcept
   {
-    return iterRate_ * timeStep;
+    return iterRate * timeStep;
   }
 
   inline void updateTibiaOffset(const sva::PTransformd & offset)
@@ -172,7 +172,8 @@ protected:
   bool hasConverged_ = false;
 
   bool gotMeasurement_ = false;
-  std::string sensorType = "None";
+  std::string sensorType_ = "None";
+  bool allowMissingSensor_ = false;
   size_t iter_ = 0;
   size_t iterRate_ = 1;
 

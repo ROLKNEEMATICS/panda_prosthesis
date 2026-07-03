@@ -2,17 +2,19 @@ name: "CI - Nix"
 on:
   push:
     branches:
-      - devel
-      - main
+      - '**'
   pull_request:
+    branches:
+      - '**'
 jobs:
   nix:
     runs-on: "${{ matrix.os }}-latest"
     strategy:
       matrix:
-        os: [ubuntu, macos]
+        # os: [ubuntu, macos]
+        os: [ubuntu]
         #extends: ["", "pkgs-eigen5", "pkgs-full", "pkgs-nanobind"]
-        extends: [""]
+        extends: ["devShells.x86_64-linux.panda-prosthesis-full"]
     steps:
       - uses: actions/checkout@v6
       - uses: cachix/install-nix-action@v31
@@ -20,6 +22,7 @@ jobs:
         with:
           name: mc-rtc-nix
           authToken: '${{ secrets.CACHIX_AUTH_TOKEN }}'
+          extraPullNames: "ros,gepetto"
       - run: nix flake check -L
       - run: nix build -L ".#${{ matrix.extends }}"
   check:

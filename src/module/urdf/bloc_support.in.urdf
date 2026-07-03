@@ -1,0 +1,80 @@
+<robot name="bloc_support">
+  <material name="frame_x_red">
+    <color rgba="1 0 0 1"/>
+  </material>
+  <material name="frame_y_green">
+    <color rgba="0 0.8 0 1"/>
+  </material>
+  <material name="frame_z_blue">
+    <color rgba="0 0.2 1 1"/>
+  </material>
+  <material name="frame_origin_white">
+    <color rgba="1 1 1 1"/>
+  </material>
+
+  <link name="bloc_support">
+    <inertial>
+      <origin xyz="-0.11143911559478534 -0.14255566442315717 0.0993634492738012" rpy="0 0 0"/>
+      <mass value="15.459307932297913"/>
+      <inertia ixx="0.223618" ixy="-6.8e-05" ixz="-0.042388" iyy="0.230323" iyz="-4e-05" izz="0.229776"/>
+    </inertial>
+
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry>
+        <mesh filename="file://@MODULE_INSTALL_LOCATION@/meshes/bloc_support/base_link.stl" scale="0.001 0.001 0.001"/>
+      </geometry>
+    </visual>
+
+    <!-- Visible base frame marker: X red, Y green, Z blue. -->
+    <visual>
+      <origin xyz="0.04 0 0" rpy="0 0 0"/>
+      <geometry><box size="0.08 0.006 0.006"/></geometry>
+      <material name="frame_x_red"/>
+    </visual>
+    <visual>
+      <origin xyz="0 0.04 0" rpy="0 0 0"/>
+      <geometry><box size="0.006 0.08 0.006"/></geometry>
+      <material name="frame_y_green"/>
+    </visual>
+    <visual>
+      <origin xyz="0 0 0.04" rpy="0 0 0"/>
+      <geometry><box size="0.006 0.006 0.08"/></geometry>
+      <material name="frame_z_blue"/>
+    </visual>
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry><box size="0.012 0.012 0.012"/></geometry>
+      <material name="frame_origin_white"/>
+    </visual>
+
+    <!-- Visible centre_capteur marker at [0.0075, -0.142618, 0.25575]. -->
+    <visual>
+      <origin xyz="0.0475 -0.142618 0.25575" rpy="0 0 0"/>
+      <geometry><box size="0.08 0.006 0.006"/></geometry>
+      <material name="frame_x_red"/>
+    </visual>
+    <visual>
+      <origin xyz="0.0075 -0.102618 0.25575" rpy="0 0 0"/>
+      <geometry><box size="0.006 0.08 0.006"/></geometry>
+      <material name="frame_y_green"/>
+    </visual>
+    <visual>
+      <origin xyz="0.0075 -0.142618 0.29575" rpy="0 0 0"/>
+      <geometry><box size="0.006 0.006 0.08"/></geometry>
+      <material name="frame_z_blue"/>
+    </visual>
+    <visual>
+      <origin xyz="0.0075 -0.142618 0.25575" rpy="0 0 0"/>
+      <geometry><box size="0.012 0.012 0.012"/></geometry>
+      <material name="frame_origin_white"/>
+    </visual>
+
+    <collision>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry>
+        <mesh filename="file://@MODULE_INSTALL_LOCATION@/meshes/bloc_support/base_link.stl" scale="0.001 0.001 0.001"/>
+      </geometry>
+    </collision>
+  </link>
+</robot>

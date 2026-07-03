@@ -8,9 +8,11 @@
 #include <mc_trajectory/LinearInterpolation.h>
 #include <boost/filesystem.hpp>
 #include <3rd-party/csv.h>
+#include <filesystem>
+#include <iomanip>
 #include <utils.h>
 
-namespace fs = boost::filesystem;
+namespace fs = std::filesystem;
 
 /**
  * \brief   Return the filenames of all files that have the specified extension
@@ -167,12 +169,11 @@ void write_csv_prototmr(const std::vector<ProtoTMRResult> & results, const std::
          "femur_x,femur_y,femur_z,"
          "tibia_x,tibia_y,tibia_z,sensor_id";
 
-  size_t dataSize = results.front().sensorData.data.size();
-  size_t halfSize = dataSize / 2;
+  size_t dataSize = results.front().sensorData.data.front().size(); // number of measurement per sensor
 
-  for(size_t i = 0; i < halfSize - 1; ++i)
+  for(size_t i = 0; i < dataSize; ++i)
   {
-    csv << ",sensor_time_" << i << ",sensor_value_" << i;
+    csv << ",sensor_value_" << i;
   }
   csv << std::endl;
 
@@ -212,7 +213,7 @@ void write_csv_prototmr(const std::vector<ProtoTMRResult> & results, const std::
 void ManipulateKnee::triggerSaveResults(bool force)
 {
   std::lock_guard<std::mutex> lock(saveResultsMutex_);
-  if(sensorType == "ProtoTMRPlugin")
+  if(sensorType_ == "ProtoTMRPlugin")
   {
     auto n = resultsProtoTMR_.results().size();
     if(n != 0 && (force || n % resultSaveAfterN == 0))
@@ -238,29 +239,30 @@ void ManipulateKnee::saveResultsThread()
 {
   auto makeResultPath = [](const std::string & resultPath, size_t resultSize)
   {
-    boost::filesystem::path origPath(resultPath);
-    boost::filesystem::path newPath =
-        origPath.parent_path() / (origPath.stem().string() + "_" + std::to_string(resultSize) + ".csv");
+    fs::path origPath(resultPath);
+    fs::path newPath = origPath.parent_path() / (origPath.stem().string() + "_" + std::to_string(resultSize) + ".csv");
     return newPath.string();
   };
   std::unique_lock<std::mutex> lock(saveResultsMutex_);
   while(saveResultsThreadRunning_)
   {
     saveResultsCv_.wait(lock);
+    mc_rtc::log::info("[{}] Got request to save data, saving...", name());
 
-    if(sensorType == "ProtoTMRPlugin")
+    if(sensorType_ == "ProtoTMRPlugin")
     {
       write_csv_prototmr(resultsProtoTMRCopy_, makeResultPath(resultPath_, resultsProtoTMRCopy_.size()));
     }
-    else if(sensorType == "BoneTagSerialPlugin")
+    else if(sensorType_ == "BoneTagSerialPlugin")
     {
       write_csv_bonetag(resultsBoneTagCopy_, makeResultPath(resultPath_, resultsBoneTagCopy_.size()));
     }
     else
     {
-      mc_rtc::log::warning("[{}] Unknown sensor type '{}', cannot save results", name(), sensorType);
+      mc_rtc::log::warning("[{}] Unknown sensor type '{}', cannot save results", name(), sensorType_);
       return;
     }
+    mc_rtc::log::info("[{}] Saving finished", name());
   }
 }
 
@@ -269,21 +271,35 @@ void ManipulateKnee::start(mc_control::fsm::Controller & ctl)
   saveResultsThreadRunning_ = true;
   saveResultsThread_ = std::thread(&ManipulateKnee::saveResultsThread, this);
 
-  if(ctl.datastore().has("BoneTagSerialPlugin::Connected")
-     && ctl.datastore().call<bool>("BoneTagSerialPlugin::Connected"))
+  config_("allow_missing_sensor", allowMissingSensor_);
+
+  // Configure default sensor name
+  // It will be the first available plugin whose sensor is connected matching the list of potentital candidates
+  auto pluginNames = ctl.config()("Plugins", std::vector<std::string>{});
+  sensorType_ = std::string{"None"};
+  for(const auto & sensorType : std::vector<std::string>{"BoneTagSerialPlugin", "ProtoTMRPlugin"})
   {
-    sensorType = "BoneTagSerialPlugin";
-    mc_rtc::log::success("[{}] Detected connected sensor type: {}", name(), sensorType);
-  }
-  else if(ctl.datastore().has("ProtoTMRPlugin::Connected") && ctl.datastore().call<bool>("ProtoTMRPlugin::Connected"))
-  {
-    sensorType = "ProtoTMRPlugin";
-    mc_rtc::log::success("[{}] Detected connected sensor type: {}", name(), sensorType);
-  }
-  else
-  {
-    mc_rtc::log::warning("[{}] No sensor type found in datastore, defaulting to 'None'", name());
-    measure_ = false;
+    auto it = std::find(pluginNames.begin(), pluginNames.end(), sensorType);
+    if(it == pluginNames.end())
+    {
+      mc_rtc::log::info("[{}] Sensor type {} not found in Plugins list, it won't be available for measurement", name(),
+                        sensorType);
+    }
+    else
+    {
+      mc_rtc::log::success("[{}] Sensor type {} found in Plugins list, checking if connected...", name(), sensorType);
+      if(ctl.datastore().has(sensorType + "::Connected") && ctl.datastore().call<bool>(sensorType + "::Connected"))
+      {
+        mc_rtc::log::success("[{}] Sensor {} is connected (or non required)", name(), sensorType_);
+        sensorType_ = sensorType;
+        break;
+      }
+      else
+      {
+        mc_rtc::log::warning("[{}] Sensor {} is not connected, it won't be available for measurement", name(),
+                             sensorType);
+      }
+    }
   }
 
   if(config_.has("femur"))
@@ -304,7 +320,7 @@ void ManipulateKnee::start(mc_control::fsm::Controller & ctl)
     c("maxRotation", maxTibiaRotation_);
   }
 
-  setRate(config_("rate", 0.2), ctl.timeStep);
+  iterRate_ = iterRateFromSeconds(config_("rate", 0.2), ctl.timeStep);
   config_("samples", desiredSamples_);
 
   if(auto convergenceC = config_.find("convergence"))
@@ -502,7 +518,7 @@ void ManipulateKnee::start(mc_control::fsm::Controller & ctl)
                             mc_rtc::gui::FormArrayInput("minFemurTranslation", false, minFemurTranslation_),
                             mc_rtc::gui::FormArrayInput("maxFemurTranslation", false, maxFemurTranslation_)));
 
-  ctl.gui()->addElement(this, {"ManipulateKnee"}, mc_rtc::gui::ElementsStacking::Horizontal,
+  ctl.gui()->addElement(this, {"ManipulateKnee", "Manual Logging"}, mc_rtc::gui::ElementsStacking::Horizontal,
                         mc_rtc::gui::Checkbox(
                             "Manual Logging", [this]() { return manualLogging_; }, [this]() {}),
                         mc_rtc::gui::Button("Start Logging",
@@ -571,8 +587,8 @@ void ManipulateKnee::start(mc_control::fsm::Controller & ctl)
                             "Samples", [this]() { return desiredSamples_; },
                             [this](double samples) { desiredSamples_ = std::max(1, static_cast<int>(samples)); }),
                         mc_rtc::gui::NumberInput(
-                            "Rate [s]", [this, &ctl]() { return getRate(ctl.timeStep); },
-                            [this, &ctl](double rate) { setRate(rate, ctl.timeStep); }));
+                            "Rate [s]", [this, &ctl]() { return iterRateToSeconds(iterRate_, ctl.timeStep); },
+                            [this, &ctl](double rate) { iterRate_ = iterRateFromSeconds(rate, ctl.timeStep); }));
 
   ctl.gui()->addElement(this, {"ManipulateKnee", "Trajectory", "Thresholds"},
                         mc_rtc::gui::NumberInput(
@@ -686,31 +702,32 @@ bool ManipulateKnee::measure(mc_control::fsm::Controller & ctl)
   {
     return true;
   }
-  else if(!ctl.datastore().has(sensorType + "::Connected") || !ctl.datastore().call<bool>(sensorType + "::Connected"))
+  else if(!ctl.datastore().has(sensorType_ + "::Connected") || !ctl.datastore().call<bool>(sensorType_ + "::Connected"))
   {
-    mc_rtc::log::error("[{}] Requested measement of {} sensors but the sensor is unavailable", name(), sensorType);
+    mc_rtc::log::error("[{}] Requested measement of {} sensors but the sensor is unavailable", name(), sensorType_);
     return false;
   }
 
   if(!newFrameRequested_)
   {
-    ctl.datastore().call(sensorType + "::RequestNewFrame");
-    mc_rtc::log::info("[{}] Requested new sensor data frame", name());
+    ctl.datastore().call(sensorType_ + "::RequestNewFrame");
+    mc_rtc::log::info("[{}] Requested new sensor data frame at iter: {}, time: {}s", name(), controllerIter_,
+                      iterRateToSeconds(controllerIter_, ctl.timeStep));
     newFrameRequested_ = true;
   }
 
   // Check until we got a new frame
-  if(!ctl.datastore().call<bool>(sensorType + "::GotNewFrame"))
+  if(!ctl.datastore().call<bool>(sensorType_ + "::GotNewFrame"))
   {
     // mc_rtc::log::info("[{}] Waiting for new sensor data frame...", name());
     return false;
   }
 
-  if(sensorType == "BoneTagSerialPlugin")
+  if(sensorType_ == "BoneTagSerialPlugin")
   {
     measure_bonetag(ctl);
   }
-  else if(sensorType == "ProtoTMRPlugin")
+  else if(sensorType_ == "ProtoTMRPlugin")
   {
     measure_prototmr(ctl);
   }
@@ -732,7 +749,7 @@ void ManipulateKnee::measure_bonetag(mc_control::fsm::Controller & ctl)
 {
   // We got a new frame
 
-  auto sensorData = ctl.datastore().call<io::BoneTagSerial::Data>(sensorType + "::GetLastFrame");
+  auto sensorData = ctl.datastore().call<io::BoneTagSerial::Data>(sensorType_ + "::GetLastFrame");
   mc_rtc::log::success("[{}] Got new sensor data frame: {}", name(), mc_rtc::io::to_string(sensorData));
 
   BoneTagResult result;
@@ -748,12 +765,13 @@ void ManipulateKnee::measure_bonetag(mc_control::fsm::Controller & ctl)
 void ManipulateKnee::measure_prototmr(mc_control::fsm::Controller & ctl)
 {
   // We got a new frame
-  auto sensorData = ctl.datastore().call<io::Serial::TimedRawData>(sensorType + "::GetLastFrame");
-  mc_rtc::log::success("[{}] Got new sensor data frame:", name());
-  for(unsigned i = 0; i < sensorData.data.size(); ++i)
-  {
-    mc_rtc::log::info("Sensor[{}]: {}", i, mc_rtc::io::to_string(sensorData.data[i]));
-  }
+  auto sensorData = ctl.datastore().call<io::Serial::TimedRawData>(sensorType_ + "::GetLastFrame");
+  mc_rtc::log::success("[{}] Got new sensor data frame at iter: {}, time: {}s", name(), controllerIter_,
+                       iterRateToSeconds(controllerIter_, ctl.timeStep));
+  // for(unsigned i = 0; i < sensorData.data.size(); ++i)
+  // {
+  //   mc_rtc::log::info("Sensor[{}]: {}", i, mc_rtc::io::to_string(sensorData.data[i]));
+  // }
 
   ProtoTMRResult result;
   result.controllerIter = controllerIter_;

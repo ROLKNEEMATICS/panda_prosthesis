@@ -1,0 +1,24 @@
+# Location of data files, all path in the YAML file are
+# interpreted relative to this path unless they are absolute paths
+path: "@MODULE_INSTALL_LOCATION@"
+name: tka_tibia
+urdf_path: urdf/tka_tibia.urdf
+rsdf_dir: rsdf/tka_tibia
+fixed: true
+
+# convexHulls are not generated yet for the TKA CAD exports
+
+# Default orientation (quaternion) and position of the floating base
+default_attitude: [1., 0., 0., 0., 0., 0., 0.]
+
+frames:
+  - name: TibiaCalibration
+    parent: tibia
+    X_p_f:
+      translation: [0, 0, 0]
+      rotation: [0, 0, 0]
+  - name: Tibia
+    parent: tibia
+    X_p_f:
+      translation: [0.003907, 0.08497, 0.201111]
+      rotation: [-1.5707963267948966, 0, 3.141592653589793]

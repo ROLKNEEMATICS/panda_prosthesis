@@ -2,11 +2,10 @@
   description = "PandaProsthesis controller for the Rolkneematics project";
 
   inputs = {
-    # mc-rtc-nix.url = "github:mc-rtc/nixpkgs";
-    # mc-rtc-nix.url = "path:/home/arnaud/devel/mc-rtc-nix/nixpkgs";
-    mc-rtc-nix.url = "github:arntanguy/nixpkgs-1?ref=topic/flakoboros";
+    mc-rtc-nix.url = "github:mc-rtc/nixpkgs";
     flake-parts.follows = "mc-rtc-nix/flake-parts";
     systems.follows = "mc-rtc-nix/systems";
+    gepetto.follows = "mc-rtc-nix/gepetto";
   };
 
   outputs =
@@ -14,31 +13,58 @@
     inputs.flake-parts.lib.mkFlake { inherit inputs; } (
       { lib, ... }:
       {
-        systems = import inputs.systems;
+        systems = [ "x86_64-linux" ];
         imports = [
           inputs.mc-rtc-nix.flakeModule
           {
+            # mc-rtc-nix.with-ros = false;
+            mc-rtc-superbuild =
+              { pkgs, ... }:
+              {
+                enable = true;
+                project.pname = "";
+                configurations = {
+                  panda-prosthesis-minimal = {
+                    extends = [ "minimal" ];
+                    runtime = {
+                      robots = [
+                        pkgs.mc-panda-lirmm
+                        pkgs.mc-panda
+                      ];
+
+                      apps = [
+                        pkgs.mc-rtc-magnum
+                      ];
+                      config = "lib/mc_controller/etc/panda_prosthesis/mc_rtc.yaml";
+                    };
+                    devel = {
+                      config = "lib64/mc_controller/etc/panda_prosthesis/mc_rtc.yaml";
+                      controllers = [ pkgs.panda-prosthesis ];
+                      plugins = [ pkgs.panda-prosthesis ];
+                      robots = [ pkgs.panda-prosthesis ];
+                    };
+                  };
+                  panda-prosthesis-full = {
+                    extends = [
+                      "default"
+                      "panda-prosthesis-minimal"
+                    ];
+                    runtime = {
+                      apps = [
+                        pkgs.mc-franka
+                      ];
+                    };
+                  };
+                };
+              };
+
             flakoboros = {
-              extraPackages = [
-                "ninja"
-                # FIXME: why are these needed here?
-                "pkg-config"
-                "rosidl-default-generators"
-                # "geometry-msgs"
-                "rosidl-default-runtime"
-                "rosidl-typesupport-c"
-                "rosidl-typesupport-cpp"
-                "ament-cmake"
-              ];
-              extraDevPackages = [ "pkg-config" ];
               overrideAttrs.panda-prosthesis =
-                _:
-                (_super: {
+                { drv-prev, pkgs-final, ... }:
+                {
                   src = lib.cleanSource ./.;
-                  # cmakeFlags = super.cmakeFlags ++ [
-                  #   "-DPYTHON_BINDINGS=OFF"
-                  # ];
-                });
+                  nativeBuildInputs = drv-prev.nativeBuildInputs ++ [ pkgs-final.pkg-config ];
+                };
             };
           }
         ];

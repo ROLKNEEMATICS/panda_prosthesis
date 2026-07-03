@@ -21,6 +21,7 @@ void save(const std::string & etc_file, const mc_rbdyn::Robot & robot, bool save
 
 void Calibrate::start(mc_control::fsm::Controller & ctl)
 {
+  config_("savePose", savePose_);
   ctl.gui()->addElement(this, {"Calibration"},
                         mc_rtc::gui::Checkbox(
                             "Save base pose", [this]() { return savePose_; }, [this]() { savePose_ = !savePose_; }),

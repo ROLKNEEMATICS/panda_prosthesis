@@ -38,10 +38,7 @@ extern "C"
               const double s = 0.005;
               const double d = 0.;
               auto & c = connect_rm->_minimalSelfCollisions;
-              if(tool.name == "tsa_glenoid" || tool.name == "tsa_humerus")
-              {
-              }
-              else
+              if(tool.module == "BoneTag::Femur" || tool.module == "BoneTag::Tibia")
               {
                 c.push_back({tool.name, "robot_support", i, s, d});
                 c.push_back({"support_" + tool.name, "robot_support", i, s, d});

@@ -1,0 +1,39 @@
+<robot name="tka_tibia">
+  <link name="tibia_base_link" />
+  <link name="support_tibia" />
+  <link name="knee_center" />
+  <link name="tibia">
+    <inertial>
+      <origin xyz="-0.00011983359453984832 0.004029728694536159 0.14458308245702886" rpy="0 0 0"/>
+      <mass value="5.1872325896641716"/>
+      <inertia ixx="0.023211" ixy="2.2e-05" ixz="3.8e-05" iyy="0.022819" iyz="-0.001202" izz="0.004167"/>
+    </inertial>
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry>
+        <mesh filename="file://@MODULE_INSTALL_LOCATION@/meshes/tka_tibia/base_link.stl" scale="0.001 0.001 0.001"/>
+      </geometry>
+    </visual>
+    <collision>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry>
+        <mesh filename="file://@MODULE_INSTALL_LOCATION@/meshes/tka_tibia/base_link.stl" scale="0.001 0.001 0.001"/>
+      </geometry>
+    </collision>
+  </link>
+  <joint name="prosthesis_to_knee_center" type="fixed">
+    <parent link="tibia"/>
+    <child link="knee_center"/>
+    <origin xyz="0.003907 0.08497 0.201111" rpy="-1.5707963267948966 0 3.141592653589793"/>
+  </joint>
+  <joint name="ee_to_support" type="fixed">
+    <parent link="tibia_base_link"/>
+    <child link="support_tibia"/>
+    <origin xyz="0 0 0" rpy="0 0 0"/>
+  </joint>
+  <joint name="support_to_prosthesis" type="fixed">
+    <parent link="support_tibia"/>
+    <child link="tibia"/>
+    <origin xyz="0 0 0" rpy="0 0 0"/>
+  </joint>
+</robot>

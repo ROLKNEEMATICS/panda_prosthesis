@@ -24,22 +24,26 @@ struct ConnectTool
 template<typename Callback>
 static void ForAllVariants(Callback cb)
 {
-  cb(ConnectRobot{"Panda2LIRMMDefault", "panda", "panda_link8"},
-     ConnectTool{"BoneTag::Femur", "femur", "femur_base_link"});
-  cb(ConnectRobot{"Panda7LIRMMDefault", "panda", "panda_link8"},
-     ConnectTool{"BoneTag::Tibia", "tibia", "tibia_base_link"});
-
-  cb(ConnectRobot{"Panda2LIRMM_2::Default", "panda", "panda_link8"},
-     ConnectTool{"BoneTag::Femur", "femur", "femur_base_link"});
-  cb(ConnectRobot{"Panda7LIRMM_2::Default", "panda", "panda_link8"},
-     ConnectTool{"BoneTag::Tibia", "tibia", "tibia_base_link"});
+  static std::string panda2 = "Panda2LIRMM_FR1_Default_Table2_Calibrated";
+  static std::string panda7 = "Panda7LIRMM_FR1_Default_Table2_Calibrated";
+  // cb(ConnectRobot{"Panda2LIRMM_2::Default", "panda", "panda_link8"},
+  //    ConnectTool{"BoneTag::Femur", "femur", "femur_base_link"});
+  // cb(ConnectRobot{"Panda7LIRMM_2::Default", "panda", "panda_link8"},
+  //    ConnectTool{"BoneTag::Tibia", "tibia", "tibia_base_link"});
+  cb(ConnectRobot{panda2, "panda", "panda_link8"}, ConnectTool{"BoneTag::Femur", "femur", "femur_base_link"});
+  cb(ConnectRobot{panda7, "panda", "panda_link8"}, ConnectTool{"BoneTag::Tibia", "tibia", "tibia_base_link"});
 
   // creates panda_taa_tibia
-  cb(ConnectRobot{"Panda2LIRMMDefault", "panda", "panda_link8"},
-     ConnectTool{"TSA::Glenoid", "tsa_glenoid", "base_link"});
+  cb(ConnectRobot{panda2, "panda", "panda_link8"}, ConnectTool{"TSA::Glenoid", "tsa_glenoid", "base_link"});
   // creates panda_tsa_humerus
-  cb(ConnectRobot{"Panda7LIRMMDefault", "panda", "panda_link8"},
-     ConnectTool{"TSA::Humerus", "tsa_humerus", "base_link"});
+  cb(ConnectRobot{panda7, "panda", "panda_link8"}, ConnectTool{"TSA::Humerus", "tsa_humerus", "base_link"});
+
+  cb(ConnectRobot{panda2, "panda", "panda_link8"}, ConnectTool{"TAA::Tibia", "taa_tibia", "taa_tibia"});
+  cb(ConnectRobot{panda7, "panda", "panda_link8"}, ConnectTool{"TAA::Talar", "taa_talar", "taa_talar"});
+  cb(ConnectRobot{panda2, "panda", "panda_link8"}, ConnectTool{"TKA::Femur", "tka_femur", "femur_base_link"});
+  cb(ConnectRobot{panda7, "panda", "panda_link8"}, ConnectTool{"TKA::Tibia", "tka_tibia", "tibia_base_link"});
+  cb(ConnectRobot{panda2, "panda", "panda_link8"}, ConnectTool{"THA::Femur", "tha_femur", "base_link"});
+  cb(ConnectRobot{panda7, "panda", "panda_link8"}, ConnectTool{"THA::Acetabular", "tha_acetabular", "base_link"});
   for(auto & robot : std::vector<ConnectRobot>{{"UR10", "panda", "wrist_3_link"}})
   {
     for(auto & tool : std::vector<ConnectTool>{{"BoneTag::Femur", "femur", "femur_base_link"},
