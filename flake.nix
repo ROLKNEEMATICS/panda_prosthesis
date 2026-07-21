@@ -6,68 +6,40 @@
     flake-parts.follows = "mc-rtc-nix/flake-parts";
     systems.follows = "mc-rtc-nix/systems";
     gepetto.follows = "mc-rtc-nix/gepetto";
+
+    ccache-trigger.follows = "mc-rtc-nix/ccache-trigger";
   };
 
   outputs =
     inputs:
-    inputs.flake-parts.lib.mkFlake { inherit inputs; } (
+    inputs.mc-rtc-nix.lib.mkMcRtcModule inputs (
       { lib, ... }:
       {
-        systems = [ "x86_64-linux" ];
-        imports = [
-          inputs.mc-rtc-nix.flakeModule
+        mc-rtc-nix.overlays.ccache = inputs.ccache-trigger.value;
+        # mc-rtc-nix.with-ros = false;
+        mc-rtc-superbuild =
+          { pkgs, ... }:
           {
-            # mc-rtc-nix.with-ros = false;
-            mc-rtc-superbuild =
-              { pkgs, ... }:
-              {
-                enable = true;
-                project.pname = "";
-                configurations = {
-                  panda-prosthesis-minimal = {
-                    extends = [ "minimal" ];
-                    runtime = {
-                      robots = [
-                        pkgs.mc-panda-lirmm
-                        pkgs.mc-panda
-                      ];
-
-                      apps = [
-                        pkgs.mc-rtc-magnum
-                      ];
-                      config = "lib/mc_controller/etc/panda_prosthesis/mc_rtc.yaml";
-                    };
-                    devel = {
-                      config = "lib64/mc_controller/etc/panda_prosthesis/mc_rtc.yaml";
-                      controllers = [ pkgs.panda-prosthesis ];
-                      plugins = [ pkgs.panda-prosthesis ];
-                      robots = [ pkgs.panda-prosthesis ];
-                    };
-                  };
-                  panda-prosthesis-full = {
-                    extends = [
-                      "default"
-                      "panda-prosthesis-minimal"
-                    ];
-                    runtime = {
-                      apps = [
-                        pkgs.mc-franka
-                      ];
-                    };
-                  };
+            enable = true;
+            project.pname = "";
+            configurations = {
+              panda-prosthesis = inputs.mc-rtc-nix.lib.mkControllerSuperbuild pkgs pkgs.panda-prosthesis { };
+              panda-prosthesis-full = {
+                extends = [ "panda-prosthesis" ];
+                runtime = {
+                  apps = [
+                    pkgs.mc-franka
+                  ];
                 };
               };
-
-            flakoboros = {
-              overrideAttrs.panda-prosthesis =
-                { drv-prev, pkgs-final, ... }:
-                {
-                  src = lib.cleanSource ./.;
-                  nativeBuildInputs = drv-prev.nativeBuildInputs ++ [ pkgs-final.pkg-config ];
-                };
             };
-          }
-        ];
+          };
+
+        flakoboros = {
+          overrideAttrs.panda-prosthesis = {
+            src = lib.cleanSource ./.;
+          };
+        };
       }
     );
 }
