@@ -36,6 +36,7 @@
           };
 
         flakoboros = {
+          overrideAttrs.mc-rtc-magnum = { };
           overrideAttrs.panda-prosthesis = {
             src = lib.cleanSource ./.;
           };
