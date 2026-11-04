@@ -1,0 +1,3 @@
+frame,time_s,femur_tangage,femur_roulis,femur_lacet,tibia_tangage,tibia_roulis,tibia_lacet,femur_x,femur_y,femur_z,tibia_x,tibia_y,tibia_z
+0,0.0,0,0,0,0,0,0,-10,0,0,0,0,0
+1,0.01,0,0,0,0,0,0,-10,0,0,0,0,0
