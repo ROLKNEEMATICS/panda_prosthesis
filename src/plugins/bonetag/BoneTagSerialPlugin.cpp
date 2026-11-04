@@ -162,7 +162,9 @@ void BoneTagSerialPlugin::before(mc_control::MCGlobalController & gc)
         lastData_ = data_el;
         lastDataIsNew_ = true;
       }
-
+      
+      serial_.received_data.clear();
+      
       if(!plotDisplayed)
       {
         plotDisplayed = true;
@@ -199,7 +201,6 @@ void BoneTagSerialPlugin::before(mc_control::MCGlobalController & gc)
                                              });
       }
     }
-    serial_.received_data.clear();
     hasReceivedData_ = false;
   }
 }
