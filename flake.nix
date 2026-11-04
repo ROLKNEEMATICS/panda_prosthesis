@@ -3,6 +3,9 @@
 
   inputs = {
     mc-rtc-nix.url = "github:mc-rtc/nixpkgs";
+    mc-rtc.url = "github:jrl-umi3218/mc_rtc";
+    mc-rtc.inputs.nixpkgs.follows = "mc-rtc-nix/nixpkgs";
+    mc-rtc.inputs.ccache-trigger.follows = "mc-rtc-nix/ccache-trigger";
     flake-parts.follows = "mc-rtc-nix/flake-parts";
     systems.follows = "mc-rtc-nix/systems";
     gepetto.follows = "mc-rtc-nix/gepetto";
@@ -36,6 +39,7 @@
           };
 
         flakoboros = {
+          overrideAttrs.mc-rtc = { src = inputs.mc-rtc; };
           overrideAttrs.mc-rtc-magnum = { };
           overrideAttrs.panda-prosthesis = {
             src = lib.cleanSource ./.;
